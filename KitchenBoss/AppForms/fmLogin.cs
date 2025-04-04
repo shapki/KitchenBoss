@@ -1,0 +1,92 @@
+﻿using KitchenBoss.Properties;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace KitchenBoss.AppForms
+{
+    public partial class fmLogin : Form
+    {
+        private bool _showingPassword = false;
+        private Timer _delayTimer;
+
+        public fmLogin()
+        {
+            InitializeComponent();
+            Icon = Resources.chef_hat;
+            HelpButtonClicked += HelpButton_Click;
+
+            _delayTimer = new Timer();
+            _delayTimer.Interval = 2000;
+            _delayTimer.Tick += DelayTimer_Tick;
+            _delayTimer.Start();
+        }
+
+        // TODO: Информация
+        private void HelpButton_Click(object sender, CancelEventArgs e)
+        {
+            if (MessageBox.Show("12345", "KitchenBoss - Информация", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
+                e.Cancel = true;
+        }
+
+        private void DelayTimer_Tick(object sender, EventArgs e)
+        {
+            _delayTimer.Stop();
+            _delayTimer.Dispose();
+            _delayTimer = null;
+
+            CheckIfUsersTableIsEmpty();
+        }
+
+        private void CheckIfUsersTableIsEmpty()
+        {
+            try
+            {
+                using (var context = Program.context)
+                {
+                    int userCount = context.Users.Count();
+
+                    if (userCount == 0)
+                    {
+                        MessageBox.Show("В базе данных нет пользователей.\nНеобходимо создать хотя-бы 2х пользователей.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        fmUserControl formUserControl = new fmUserControl();
+                        formUserControl.ShowDialog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при подключении к базе данных или выполнении запроса: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+        }
+
+        private void showPasswordPictureBox_Click(object sender, EventArgs e)
+        {
+            ChangePasswordCharsVisibility();
+        }
+
+        private void ChangePasswordCharsVisibility()
+        {
+            _showingPassword = !_showingPassword;
+            passwordTextBox.UseSystemPasswordChar = _showingPassword;
+
+            if (_showingPassword)
+                showPasswordPictureBox.Image = Resources.regular_eye_DISMISS_x20;
+            else
+                showPasswordPictureBox.Image = Resources.regular_eye_x20;
+        }
+
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+    }
+}
