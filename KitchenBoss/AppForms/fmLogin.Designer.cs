@@ -144,6 +144,7 @@
             // loginButton
             // 
             this.loginButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.loginButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.loginButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
             this.loginButton.FlatAppearance.BorderSize = 2;
             this.loginButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
@@ -163,6 +164,7 @@
             // cancelButton
             // 
             this.cancelButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
             this.cancelButton.FlatAppearance.BorderSize = 2;
             this.cancelButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
@@ -193,8 +195,10 @@
             // 
             // fmLogin
             // 
+            this.AcceptButton = this.loginButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(269, 162);
             this.Controls.Add(this.showPasswordPictureBox);
             this.Controls.Add(this.cancelButton);

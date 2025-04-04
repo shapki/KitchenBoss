@@ -6,6 +6,8 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
+    // TODO:
+    // главную форму, в которой будет header и у самой формы будут свойства, которые надо будет наследовать другими формами проекта
     public partial class fmLogin : Form
     {
         private bool _showingPassword = false;
@@ -23,7 +25,6 @@ namespace KitchenBoss.AppForms
             _delayTimer.Start();
         }
 
-        // TODO: Информация
         private void HelpButton_Click(object sender, CancelEventArgs e)
         {
             if (MessageBox.Show("KitchenBoss - это приложение, предназначенное для автоматизации ключевых бизнес-процессов в ресторане." +
@@ -55,7 +56,7 @@ namespace KitchenBoss.AppForms
 
                     if (userCount == 0)
                     {
-                        DialogResult result = MessageBox.Show("В базе данных нет пользователей.\nНеобходимо создать хотя-бы 2х пользователей.\n\nПерейти к созданию?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        DialogResult result = MessageBox.Show("В базе данных нет пользователей.\nНеобходимо создать хотя-бы менеджера.\n\nПерейти к созданию?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (result == DialogResult.Yes)
                         {
                             fmUserControl formUserControl = new fmUserControl();

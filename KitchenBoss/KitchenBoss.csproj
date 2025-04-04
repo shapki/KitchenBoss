@@ -88,6 +88,9 @@
     <EmbeddedResource Include="AppForms\fmLogin.resx">
       <DependentUpon>fmLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AppForms\fmUserControl.resx">
+      <DependentUpon>fmUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
