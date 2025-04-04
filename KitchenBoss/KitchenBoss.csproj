@@ -133,5 +133,8 @@
   <ItemGroup>
     <None Include="Resources\regular_x_x20.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Shapkin_KitchenBoss.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

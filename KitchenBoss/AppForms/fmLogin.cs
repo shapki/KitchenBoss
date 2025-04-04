@@ -26,7 +26,13 @@ namespace KitchenBoss.AppForms
         // TODO: Информация
         private void HelpButton_Click(object sender, CancelEventArgs e)
         {
-            if (MessageBox.Show("12345", "KitchenBoss - Информация", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
+            if (MessageBox.Show("KitchenBoss - это приложение, предназначенное для автоматизации ключевых бизнес-процессов в ресторане." +
+                "\nПриложение позволяет управлять:" +
+                "\n• Меню и ингредиентами" +
+                "\n• Сотрудниками и должностями" +
+                "\n• Заказами и статусами" +
+                "\n• Клиентами и столиками" +
+                "\n• Финансовыми операциями (частично)", "KitchenBoss - Информация", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
                 e.Cancel = true;
         }
 
@@ -49,10 +55,12 @@ namespace KitchenBoss.AppForms
 
                     if (userCount == 0)
                     {
-                        MessageBox.Show("В базе данных нет пользователей.\nНеобходимо создать хотя-бы 2х пользователей.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        fmUserControl formUserControl = new fmUserControl();
-                        formUserControl.ShowDialog();
+                        DialogResult result = MessageBox.Show("В базе данных нет пользователей.\nНеобходимо создать хотя-бы 2х пользователей.\n\nПерейти к созданию?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (result == DialogResult.Yes)
+                        {
+                            fmUserControl formUserControl = new fmUserControl();
+                            formUserControl.ShowDialog();
+                        }
                     }
                 }
             }
