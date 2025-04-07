@@ -152,7 +152,7 @@
             this.loginButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
             this.loginButton.Image = global::KitchenBoss.Properties.Resources.regular_login_x20;
             this.loginButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.loginButton.Location = new System.Drawing.Point(96, 124);
+            this.loginButton.Location = new System.Drawing.Point(90, 124);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(75, 28);
             this.loginButton.TabIndex = 8;
@@ -172,11 +172,11 @@
             this.cancelButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
             this.cancelButton.Image = global::KitchenBoss.Properties.Resources.regular_x_x20;
             this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.cancelButton.Location = new System.Drawing.Point(177, 124);
+            this.cancelButton.Location = new System.Drawing.Point(171, 124);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(80, 28);
+            this.cancelButton.Size = new System.Drawing.Size(86, 28);
             this.cancelButton.TabIndex = 9;
-            this.cancelButton.Text = "Отмена";
+            this.cancelButton.Text = "Закрыть";
             this.cancelButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cancelButton.UseVisualStyleBackColor = false;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);

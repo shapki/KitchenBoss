@@ -127,11 +127,23 @@
   <data name="regular_add_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_add_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="regular_clients_x30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_clients_x30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="regular_control_panel_x30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_control_panel_x30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="regular_dishes_x30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_dishes_x30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="regular_dish_category_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_dish_category_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="regular_edit_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_edit_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="regular_employee_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\regular_employee_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="regular_employee_x30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_employee_x30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="regular_eye_DISMISS_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_eye_DISMISS_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,11 +151,20 @@
   <data name="regular_eye_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_eye_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="regular_ingredients_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_ingredients_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="regular_job_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_job_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="regular_login_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_login_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="regular_logout_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_logout_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="regular_orders_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_orders_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="regular_save_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_save_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

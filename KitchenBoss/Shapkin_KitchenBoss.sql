@@ -287,19 +287,6 @@ BEGIN
 END;
 GO
 
--- Пример использования функции HashPassword и добавления пользователя
--- 1. Создаем новую соль (генерируется один раз для каждого пользователя)
---DECLARE @NewSalt UNIQUEIDENTIFIER = NEWID();
-
--- 2. Хэшируем пароль с новой солью
---DECLARE @PasswordToHash NVARCHAR(MAX) = N'P@$$wOrd';
---DECLARE @HashedPassword VARBINARY(64) = dbo.HashPassword(@PasswordToHash, @NewSalt);
-
--- 3. Вставляем данные пользователя в таблицу Users (пример)
---INSERT INTO Users (Username, PasswordHash, PasswordSalt, PositionID)
---VALUES (N'TestUser', @HashedPassword, @NewSalt, 1);
-
-
 
 SELECT * FROM Customer;
 --SELECT * FROM Dish;
@@ -353,3 +340,8 @@ JOIN Dish d ON oi.DishID = d.DishID;
 SELECT * FROM OrderStatus;
 SELECT * FROM Position;
 SELECT * FROM [Table];
+
+USE Shapkin_KitchenBoss;
+GO
+SELECT * FROM Users;
+TRUNCATE TABLE Users;

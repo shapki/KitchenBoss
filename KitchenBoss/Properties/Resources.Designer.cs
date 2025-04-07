@@ -93,6 +93,46 @@ namespace KitchenBoss.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap regular_clients_x30 {
+            get {
+                object obj = ResourceManager.GetObject("regular_clients_x30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_control_panel_x30 {
+            get {
+                object obj = ResourceManager.GetObject("regular_control_panel_x30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_dish_category_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_dish_category_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_dishes_x30 {
+            get {
+                object obj = ResourceManager.GetObject("regular_dishes_x30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap regular_edit_x20 {
             get {
                 object obj = ResourceManager.GetObject("regular_edit_x20", resourceCulture);
@@ -103,9 +143,9 @@ namespace KitchenBoss.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap regular_employee_x20 {
+        internal static System.Drawing.Bitmap regular_employee_x30 {
             get {
-                object obj = ResourceManager.GetObject("regular_employee_x20", resourceCulture);
+                object obj = ResourceManager.GetObject("regular_employee_x30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,6 +173,26 @@ namespace KitchenBoss.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap regular_ingredients_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_ingredients_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_job_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_job_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap regular_login_x20 {
             get {
                 object obj = ResourceManager.GetObject("regular_login_x20", resourceCulture);
@@ -146,6 +206,16 @@ namespace KitchenBoss.Properties {
         internal static System.Drawing.Bitmap regular_logout_x20 {
             get {
                 object obj = ResourceManager.GetObject("regular_logout_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_orders_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_orders_x20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -100,21 +100,33 @@ namespace KitchenBoss.AppForms
         {
             try
             {
-                var assignedEmployeeIds = _usersList?.Where(u => u.EmployeeID != null).Select(u => u.EmployeeID).ToList();
-                List<Employee> availableEmployees = _employeesList?.Where(e => assignedEmployeeIds != null && !assignedEmployeeIds.Contains(e.EmployeeID)).ToList();
+                var assignedEmployeeIds = _usersList?
+                    .Where(u => u.EmployeeID != null)
+                    .Select(u => u.EmployeeID)
+                    .ToList();
+
+                List<Employee> availableEmployees = _employeesList?
+                    .Where(e => assignedEmployeeIds == null || !assignedEmployeeIds.Contains(e.EmployeeID))
+                    .ToList();
+
+                var employeesWithFullName = availableEmployees?
+                    .Select(e => new
+                    {
+                        EmployeeID = e.EmployeeID,
+                        FullName = $"{e.FirstName} {e.LastName}"
+                    })
+                    .ToList();
 
                 DataGridViewComboBoxColumn employeeColumn = (DataGridViewComboBoxColumn)usersDgv.Columns["employee"];
 
-                if (availableEmployees != null && availableEmployees.Any())
+                if (employeesWithFullName != null && employeesWithFullName.Any())
                 {
-                    employeeColumn.DataSource = availableEmployees;
-                    employeeColumn.DisplayMember = "FirstName";
+                    employeeColumn.DataSource = employeesWithFullName;
+                    employeeColumn.DisplayMember = "FullName";
                     employeeColumn.ValueMember = "EmployeeID";
                 }
                 else
-                {
                     employeeColumn.DataSource = null;
-                }
             }
             catch (Exception ex)
             {

@@ -58,6 +58,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppForms\fmClients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppForms\fmClients.Designer.cs">
+      <DependentUpon>fmClients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppForms\fmDishes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppForms\fmDishes.Designer.cs">
+      <DependentUpon>fmDishes.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppForms\fmEmployees.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +109,12 @@
     <Compile Include="AppModels\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AppForms\fmClients.resx">
+      <DependentUpon>fmClients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AppForms\fmDishes.resx">
+      <DependentUpon>fmDishes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmEmployees.resx">
       <DependentUpon>fmEmployees.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,7 +176,14 @@
     <None Include="Resources\regular_save_x20.png" />
     <None Include="Resources\regular_add_x20.png" />
     <None Include="Resources\regular_edit_x20.png" />
-    <None Include="Resources\regular_employee_x20.png" />
+    <None Include="Resources\regular_job_x20.png" />
+    <None Include="Resources\regular_orders_x20.png" />
+    <None Include="Resources\regular_dish_category_x20.png" />
+    <None Include="Resources\regular_ingredients_x20.png" />
+    <None Include="Resources\regular_clients_x30.png" />
+    <None Include="Resources\regular_employee_x30.png" />
+    <None Include="Resources\regular_dishes_x30.png" />
+    <None Include="Resources\regular_control_panel_x30.png" />
     <Content Include="Shapkin_KitchenBoss.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -172,6 +172,7 @@
             this.Controls.Add(this.usersDgv);
             this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.saveButton);
+            this.MaximizeBox = false;
             this.Name = "fmUserControl";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

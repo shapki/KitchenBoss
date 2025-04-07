@@ -8,7 +8,8 @@ namespace KitchenBoss.AppForms
 {
     internal static class Program
     {
-        public static KitchenBossModel context = new KitchenBossModel();
+        // public static KitchenBossModel context = new KitchenBossModel();
+        public static KitchenBossModel context { get { return new KitchenBossModel(); } }
 
         /// <summary>
         /// Главная точка входа для приложения.
