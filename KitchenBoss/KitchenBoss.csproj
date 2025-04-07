@@ -58,11 +58,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppForms\fmEmployees.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppForms\fmEmployees.Designer.cs">
+      <DependentUpon>fmEmployees.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppForms\fmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AppForms\fmLogin.Designer.cs">
       <DependentUpon>fmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppForms\fmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppForms\fmMain.Designer.cs">
+      <DependentUpon>fmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="AppForms\fmUserControl.cs">
       <SubType>Form</SubType>
@@ -85,11 +97,17 @@
     <Compile Include="AppModels\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AppForms\fmEmployees.resx">
+      <DependentUpon>fmEmployees.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmLogin.resx">
       <DependentUpon>fmLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmUserControl.resx">
       <DependentUpon>fmUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AppForms\fmMain.resx">
+      <DependentUpon>fmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -137,6 +155,10 @@
     <None Include="Resources\regular_x_x20.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\regular_save_x20.png" />
+    <None Include="Resources\regular_add_x20.png" />
+    <None Include="Resources\regular_edit_x20.png" />
+    <None Include="Resources\regular_employee_x20.png" />
     <Content Include="Shapkin_KitchenBoss.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

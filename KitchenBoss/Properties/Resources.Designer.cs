@@ -83,6 +83,36 @@ namespace KitchenBoss.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap regular_add_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_add_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_edit_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_edit_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_employee_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_employee_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap regular_eye_DISMISS_x20 {
             get {
                 object obj = ResourceManager.GetObject("regular_eye_DISMISS_x20", resourceCulture);
@@ -116,6 +146,16 @@ namespace KitchenBoss.Properties {
         internal static System.Drawing.Bitmap regular_logout_x20 {
             get {
                 object obj = ResourceManager.GetObject("regular_logout_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_save_x20 {
+            get {
+                object obj = ResourceManager.GetObject("regular_save_x20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

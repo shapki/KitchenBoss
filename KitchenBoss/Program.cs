@@ -1,6 +1,7 @@
 ﻿using KitchenBoss.AppModels;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
@@ -17,8 +18,14 @@ namespace KitchenBoss.AppForms
         {
             Debug.Assert(context.Database.Exists(), "Не удаётся установить соединение с базой данных");
 
+            if (!context.Users.Any())
+            {
+                MessageBox.Show("В базе данных нет пользователей. Необходимо создать хотя-бы первого пользователя (менеджера).", "Первоначальная настройка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                fmUserControl userControlForm = new fmUserControl();
+                userControlForm.ShowDialog();
+            }
+
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new fmLogin());
         }
     }

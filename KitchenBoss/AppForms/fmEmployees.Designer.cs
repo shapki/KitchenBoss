@@ -1,6 +1,6 @@
 ﻿namespace KitchenBoss.AppForms
 {
-    partial class fmUserControl
+    partial class fmEmployees
     {
         /// <summary>
         /// Required designer variable.
@@ -28,35 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fmUserControl));
-            this.headerSubtitleLabel = new System.Windows.Forms.Label();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fmEmployees));
             this.headerPanel = new System.Windows.Forms.Panel();
             this.headerTitleLabel = new System.Windows.Forms.Label();
+            this.headerSubtitleLabel = new System.Windows.Forms.Label();
             this.headerLogoBackPanel = new System.Windows.Forms.Panel();
             this.headerLogoPictureBox = new System.Windows.Forms.PictureBox();
+            this.employeesDgv = new System.Windows.Forms.DataGridView();
             this.saveButton = new System.Windows.Forms.Button();
-            this.usersDgv = new System.Windows.Forms.DataGridView();
-            this.username = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.password = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.employee = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.position = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.headerPanel.SuspendLayout();
             this.headerLogoBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.usersDgv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.employeesDgv)).BeginInit();
             this.SuspendLayout();
-            // 
-            // headerSubtitleLabel
-            // 
-            this.headerSubtitleLabel.AutoSize = true;
-            this.headerSubtitleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.headerSubtitleLabel.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 15F);
-            this.headerSubtitleLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.headerSubtitleLabel.Location = new System.Drawing.Point(66, 35);
-            this.headerSubtitleLabel.Name = "headerSubtitleLabel";
-            this.headerSubtitleLabel.Size = new System.Drawing.Size(241, 25);
-            this.headerSubtitleLabel.TabIndex = 3;
-            this.headerSubtitleLabel.Text = "Управление пользователями";
             // 
             // headerPanel
             // 
@@ -68,7 +52,7 @@
             this.headerPanel.Location = new System.Drawing.Point(0, 0);
             this.headerPanel.Name = "headerPanel";
             this.headerPanel.Size = new System.Drawing.Size(481, 60);
-            this.headerPanel.TabIndex = 12;
+            this.headerPanel.TabIndex = 13;
             // 
             // headerTitleLabel
             // 
@@ -81,6 +65,18 @@
             this.headerTitleLabel.Size = new System.Drawing.Size(200, 34);
             this.headerTitleLabel.TabIndex = 4;
             this.headerTitleLabel.Text = "KITCHEN BOSS\r\n";
+            // 
+            // headerSubtitleLabel
+            // 
+            this.headerSubtitleLabel.AutoSize = true;
+            this.headerSubtitleLabel.BackColor = System.Drawing.Color.Transparent;
+            this.headerSubtitleLabel.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 15F);
+            this.headerSubtitleLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.headerSubtitleLabel.Location = new System.Drawing.Point(66, 35);
+            this.headerSubtitleLabel.Name = "headerSubtitleLabel";
+            this.headerSubtitleLabel.Size = new System.Drawing.Size(105, 25);
+            this.headerSubtitleLabel.TabIndex = 3;
+            this.headerSubtitleLabel.Text = "Сотрудники";
             // 
             // headerLogoBackPanel
             // 
@@ -101,6 +97,15 @@
             this.headerLogoPictureBox.TabIndex = 0;
             this.headerLogoPictureBox.TabStop = false;
             // 
+            // employeesDgv
+            // 
+            this.employeesDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.employeesDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.employeesDgv.Location = new System.Drawing.Point(12, 66);
+            this.employeesDgv.Name = "employeesDgv";
+            this.employeesDgv.Size = new System.Drawing.Size(457, 280);
+            this.employeesDgv.TabIndex = 18;
+            // 
             // saveButton
             // 
             this.saveButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -116,87 +121,41 @@
             this.saveButton.Location = new System.Drawing.Point(370, 352);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(99, 28);
-            this.saveButton.TabIndex = 13;
+            this.saveButton.TabIndex = 17;
             this.saveButton.Text = "Сохранить";
             this.saveButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.saveButton.UseVisualStyleBackColor = false;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // usersDgv
-            // 
-            this.usersDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.usersDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.usersDgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.username,
-            this.password,
-            this.employee,
-            this.position});
-            this.usersDgv.Location = new System.Drawing.Point(12, 66);
-            this.usersDgv.Name = "usersDgv";
-            this.usersDgv.Size = new System.Drawing.Size(457, 280);
-            this.usersDgv.TabIndex = 16;
-            this.usersDgv.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.usersDgv_CellBeginEdit);
-            this.usersDgv.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.usersDgv_CellValueChanged);
-            this.usersDgv.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.usersDgv_UserAddedRow);
-            this.usersDgv.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.usersDgv_UserDeletedRow);
-            // 
-            // username
-            // 
-            this.username.HeaderText = "Логин";
-            this.username.Name = "username";
-            // 
-            // password
-            // 
-            this.password.HeaderText = "Пароль";
-            this.password.Name = "password";
-            // 
-            // employee
-            // 
-            this.employee.HeaderText = "ФИО сотрудника";
-            this.employee.Name = "employee";
-            this.employee.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.employee.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // position
-            // 
-            this.position.HeaderText = "Доступ";
-            this.position.Name = "position";
-            this.position.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.position.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // fmUserControl
+            // fmEmployees
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(481, 392);
-            this.Controls.Add(this.usersDgv);
-            this.Controls.Add(this.headerPanel);
+            this.Controls.Add(this.employeesDgv);
             this.Controls.Add(this.saveButton);
-            this.Name = "fmUserControl";
+            this.Controls.Add(this.headerPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "fmEmployees";
             this.ShowIcon = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "KitchenBoss - Управление пользователями";
+            this.Text = "KitchenBoss - Сотрудники";
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
             this.headerLogoBackPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.usersDgv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.employeesDgv)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label headerSubtitleLabel;
         private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Label headerTitleLabel;
+        private System.Windows.Forms.Label headerSubtitleLabel;
         private System.Windows.Forms.Panel headerLogoBackPanel;
         private System.Windows.Forms.PictureBox headerLogoPictureBox;
+        private System.Windows.Forms.DataGridView employeesDgv;
         private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.DataGridView usersDgv;
-        private System.Windows.Forms.DataGridViewTextBoxColumn username;
-        private System.Windows.Forms.DataGridViewTextBoxColumn password;
-        private System.Windows.Forms.DataGridViewComboBoxColumn employee;
-        private System.Windows.Forms.DataGridViewComboBoxColumn position;
     }
 }

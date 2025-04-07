@@ -36,7 +36,7 @@
             this.headerLogoPictureBox = new System.Windows.Forms.PictureBox();
             this.loginLabel = new System.Windows.Forms.Label();
             this.passwordLabel = new System.Windows.Forms.Label();
-            this.loginTextBox = new System.Windows.Forms.TextBox();
+            this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.loginButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -126,12 +126,12 @@
             this.passwordLabel.TabIndex = 5;
             this.passwordLabel.Text = "Пароль";
             // 
-            // loginTextBox
+            // usernameTextBox
             // 
-            this.loginTextBox.Location = new System.Drawing.Point(71, 71);
-            this.loginTextBox.Name = "loginTextBox";
-            this.loginTextBox.Size = new System.Drawing.Size(186, 20);
-            this.loginTextBox.TabIndex = 6;
+            this.usernameTextBox.Location = new System.Drawing.Point(71, 71);
+            this.usernameTextBox.Name = "usernameTextBox";
+            this.usernameTextBox.Size = new System.Drawing.Size(186, 20);
+            this.usernameTextBox.TabIndex = 6;
             // 
             // passwordTextBox
             // 
@@ -204,17 +204,20 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.passwordTextBox);
-            this.Controls.Add(this.loginTextBox);
+            this.Controls.Add(this.usernameTextBox);
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.loginLabel);
             this.Controls.Add(this.headerPanel);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "fmLogin";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KitchenBoss - Авторизация";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmLogin_FormClosing);
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
             this.headerLogoBackPanel.ResumeLayout(false);
@@ -234,7 +237,7 @@
         private System.Windows.Forms.Label headerSubtitleLabel;
         private System.Windows.Forms.Label loginLabel;
         private System.Windows.Forms.Label passwordLabel;
-        private System.Windows.Forms.TextBox loginTextBox;
+        private System.Windows.Forms.TextBox usernameTextBox;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Button loginButton;
         private System.Windows.Forms.Button cancelButton;
