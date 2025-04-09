@@ -125,10 +125,11 @@
             this.employeesButton.Location = new System.Drawing.Point(164, 66);
             this.employeesButton.Name = "employeesButton";
             this.employeesButton.Size = new System.Drawing.Size(178, 45);
-            this.employeesButton.TabIndex = 14;
+            this.employeesButton.TabIndex = 15;
             this.employeesButton.Text = "Сотрудники";
             this.employeesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.employeesButton.UseVisualStyleBackColor = false;
+            this.employeesButton.Click += new System.EventHandler(this.employeesButton_Click);
             // 
             // dishesButton
             // 
@@ -144,10 +145,11 @@
             this.dishesButton.Location = new System.Drawing.Point(12, 117);
             this.dishesButton.Name = "dishesButton";
             this.dishesButton.Size = new System.Drawing.Size(127, 45);
-            this.dishesButton.TabIndex = 15;
+            this.dishesButton.TabIndex = 16;
             this.dishesButton.Text = "Блюда";
             this.dishesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.dishesButton.UseVisualStyleBackColor = false;
+            this.dishesButton.Click += new System.EventHandler(this.dishesButton_Click);
             // 
             // clientsButton
             // 
@@ -163,10 +165,11 @@
             this.clientsButton.Location = new System.Drawing.Point(12, 66);
             this.clientsButton.Name = "clientsButton";
             this.clientsButton.Size = new System.Drawing.Size(146, 45);
-            this.clientsButton.TabIndex = 17;
+            this.clientsButton.TabIndex = 14;
             this.clientsButton.Text = "Клиенты";
             this.clientsButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.clientsButton.UseVisualStyleBackColor = false;
+            this.clientsButton.Click += new System.EventHandler(this.clientsButton_Click);
             // 
             // userControlButton
             // 
@@ -183,10 +186,11 @@
             this.userControlButton.Location = new System.Drawing.Point(145, 117);
             this.userControlButton.Name = "userControlButton";
             this.userControlButton.Size = new System.Drawing.Size(197, 45);
-            this.userControlButton.TabIndex = 21;
+            this.userControlButton.TabIndex = 17;
             this.userControlButton.Text = "Управ. Польз";
             this.userControlButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.userControlButton.UseVisualStyleBackColor = false;
+            this.userControlButton.Click += new System.EventHandler(this.userControlButton_Click);
             // 
             // logoutButton
             // 

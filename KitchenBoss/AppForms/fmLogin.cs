@@ -8,6 +8,10 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
+    /// <summary>
+    /// TODO: Подогнать под требования
+    /// TODO: Написать summary-комментарии
+    /// </summary>
     public partial class fmLogin : Form
     {
         private bool _showingPassword = false;
@@ -107,7 +111,8 @@ namespace KitchenBoss.AppForms
 
             DialogResult result = MessageBox.Show("Вы действительно хотите выйти\nиз приложения?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
-                Application.Exit();
+                foreach (Form openForm in Application.OpenForms.Cast<Form>().ToArray())
+                    openForm.Close();
             else
             {
                 e.Cancel = true;
@@ -121,7 +126,8 @@ namespace KitchenBoss.AppForms
 
             DialogResult result = MessageBox.Show("Вы действительно хотите выйти\nиз приложения?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
-                Application.Exit();
+                foreach (Form openForm in Application.OpenForms.Cast<Form>().ToArray())
+                    openForm.Close();
         }
 
         private void fmLogin_FormClosing(object sender, FormClosingEventArgs e)

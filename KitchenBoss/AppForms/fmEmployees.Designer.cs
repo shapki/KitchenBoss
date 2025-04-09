@@ -106,6 +106,12 @@
             this.employeesDgv.Name = "employeesDgv";
             this.employeesDgv.Size = new System.Drawing.Size(457, 280);
             this.employeesDgv.TabIndex = 18;
+            this.employeesDgv.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.employeesDgv_CellValueChanged);
+            this.employeesDgv.CurrentCellDirtyStateChanged += new System.EventHandler(this.employeesDgv_CurrentCellDirtyStateChanged);
+            this.employeesDgv.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.employeesDgv_DataError);
+            this.employeesDgv.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.employeesDgv_DefaultValuesNeeded);
+            this.employeesDgv.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.employeesDgv_UserDeletedRow);
+            this.employeesDgv.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.employeesDgv_UserDeletingRow);
             // 
             // saveButton
             // 
@@ -146,6 +152,7 @@
             this.positionsButton.Text = "Должности";
             this.positionsButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.positionsButton.UseVisualStyleBackColor = false;
+            this.positionsButton.Click += new System.EventHandler(this.positionsButton_Click);
             // 
             // fmEmployees
             // 

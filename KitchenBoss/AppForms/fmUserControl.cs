@@ -9,6 +9,12 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
+    /// <summary>
+    /// TODO: Подогнать под требования
+    /// TODO: Изменить код, чтобы он работал с новым context
+    /// TODO: Написать summary-комментарии
+    /// TODO: Исправить работу подстановки значений у comboBox
+    /// </summary>
     public partial class fmUserControl : Form
     {
         private List<User> _usersList;
@@ -34,7 +40,7 @@ namespace KitchenBoss.AppForms
         {
             try
             {
-                _usersList = Program.context?.Users
+                _usersList = Program.oldContext?.Users
                     .Include(u => u.Employee)
                     .Include(u => u.Position)
                     .ToList();
@@ -69,7 +75,7 @@ namespace KitchenBoss.AppForms
         {
             try
             {
-                _employeesList = Program.context?.Employees.ToList();
+                _employeesList = Program.oldContext?.Employees.ToList();
             }
             catch (Exception ex)
             {
@@ -84,7 +90,7 @@ namespace KitchenBoss.AppForms
         {
             try
             {
-                _positionsList = Program.context?.Positions.ToList();
+                _positionsList = Program.oldContext?.Positions.ToList();
 
                 UpdatePositionComboBox();
 
@@ -160,7 +166,7 @@ namespace KitchenBoss.AppForms
         {
             try
             {
-                if (Program.context == null)
+                if (Program.oldContext == null)
                 {
                     MessageBox.Show("Контекст базы данных не инициализирован.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -237,7 +243,7 @@ namespace KitchenBoss.AppForms
                             PositionID = positionId.Value
                         };
 
-                        Program.context.Users.Add(newUser);
+                        Program.oldContext.Users.Add(newUser);
                     }
                     else
                     {
@@ -256,7 +262,7 @@ namespace KitchenBoss.AppForms
                     }
                 }
 
-                Program.context.SaveChanges();
+                Program.oldContext.SaveChanges();
                 MessageBox.Show("Изменения успешно сохранены.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 saveButton.Enabled = false;
                 LoadUsers();
@@ -296,7 +302,7 @@ namespace KitchenBoss.AppForms
             saveButton.Enabled = true;
             try
             {
-                if (Program.context == null)
+                if (Program.oldContext == null)
                 {
                     MessageBox.Show("Контекст базы данных не инициализирован.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -306,8 +312,8 @@ namespace KitchenBoss.AppForms
 
                 if (deletedUser != null)
                 {
-                    Program.context.Users.Remove(deletedUser);
-                    Program.context.SaveChanges();
+                    Program.oldContext.Users.Remove(deletedUser);
+                    Program.oldContext.SaveChanges();
 
                     MessageBox.Show("Пользователь успешно удален.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     saveButton.Enabled = false;
