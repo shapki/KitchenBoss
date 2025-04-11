@@ -223,9 +223,29 @@ namespace KitchenBoss.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap regular_orders_x30 {
+            get {
+                object obj = ResourceManager.GetObject("regular_orders_x30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap regular_save_x20 {
             get {
                 object obj = ResourceManager.GetObject("regular_save_x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap regular_tables_x30 {
+            get {
+                object obj = ResourceManager.GetObject("regular_tables_x30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

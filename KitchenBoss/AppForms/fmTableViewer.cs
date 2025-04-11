@@ -1,0 +1,1151 @@
+﻿using KitchenBoss.AppModels;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace KitchenBoss.AppForms
+{
+    /// <summary>
+    /// TODO: Подогнать под требования
+    /// TODO: Написать summary-комментарии
+    /// TODO: Запретить редактирование чеков у заказов со статусом "Отменен" и "Закрыт"
+    /// </summary>
+    public partial class fmTableViewer : Form
+    {
+        private bool isChanged = false;
+        private readonly List<EmployeeViewModel> deletedEmployees = new List<EmployeeViewModel>();
+        private bool isPositionsMode = false;
+        private bool isCustomersMode = false;
+        private bool isOrdersMode = false;
+        private bool isOrderItemsMode = false;
+        private int? customerIdForOrders = null;
+        private int? selectedOrderID = null;
+
+        public fmTableViewer()
+        {
+            InitializeComponent();
+            SetupDataGridView();
+            LoadData();
+        }
+
+        public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false, int? customerId = null, int? orderId = null, bool orderItemsMode = false)
+        {
+            InitializeComponent();
+            isPositionsMode = positionsMode;
+            isCustomersMode = customerMode;
+            isOrdersMode = ordersMode;
+            isOrderItemsMode = orderItemsMode;
+            customerIdForOrders = customerId;
+            selectedOrderID = orderId;
+
+            if (isPositionsMode)
+            {
+                Text = "KitchenBoss - Должности";
+                headerSubtitleLabel.Text = "Должности";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                SetupPositionsDataGridView();
+                LoadPositionsData();
+            }
+            else if (isCustomersMode)
+            {
+                Text = "KitchenBoss - Клиенты";
+                headerSubtitleLabel.Text = "Клиенты";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                SetupCustomersDataGridView();
+                LoadCustomersData();
+            }
+            else if (isOrdersMode)
+            {
+                Text = "KitchenBoss - Заказы клиентов";
+                headerSubtitleLabel.Text = "Заказы клиентов";
+                Size = new Size(682, 431);
+                tableViewerDgv.Size = new Size(642, 280);
+                saveButton.Location = new Point(555, 352);
+                clientOrderDishesButton.Location = new Point(441, 352);
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = true;
+                SetupOrdersDataGridView();
+                LoadOrdersData();
+                AllowUserToAddNewRowInOrderDataGridView();
+            }
+            else if (isOrderItemsMode)
+            {
+                Text = "KitchenBoss - Чек клиента";
+                headerSubtitleLabel.Text = "Чек клиента";
+                Size = new Size(497, 431);
+                tableViewerDgv.Size = new Size(457, 280);
+                saveButton.Location = new Point(370, 352);
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                SetupOrderItemsDataGridView();
+                LoadOrderItemsData(selectedOrderID ?? 0);
+            }
+            else
+            {
+                SetupDataGridView();
+                LoadData();
+            }
+
+            if (isOrderItemsMode && customerId.HasValue)
+            {
+                using (var context = Program.context)
+                {
+                    var customer = context.Customers.Find(customerId.Value);
+                    if (customer != null)
+                    {
+                        Text = $"KitchenBoss - {customer.FirstName} {customer.LastName} - Чек";
+                        headerSubtitleLabel.Text = $"{customer.FirstName} {customer.LastName} - чек";
+                    }
+                    else
+                        headerSubtitleLabel.Text = "Чек";
+                }
+            }
+
+        }
+
+        private void SetupDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+
+            tableViewerDgv.Columns.Clear();
+
+            var employeeIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "EmployeeID",
+                HeaderText = "ID",
+                DataPropertyName = "EmployeeID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(employeeIdColumn);
+
+            var nameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "FullName",
+                HeaderText = "ФИО",
+                DataPropertyName = "FullName"
+            };
+            tableViewerDgv.Columns.Add(nameColumn);
+
+            var positionColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "PositionID",
+                HeaderText = "Должность",
+                DataPropertyName = "PositionID"
+            };
+            tableViewerDgv.Columns.Add(positionColumn);
+
+            var hireDateColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "HireDate",
+                HeaderText = "Дата найма",
+                DataPropertyName = "HireDate"
+            };
+            hireDateColumn.DefaultCellStyle.Format = "dd.MM.yyyy";
+            tableViewerDgv.Columns.Add(hireDateColumn);
+
+            var salaryColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Salary",
+                HeaderText = "Зарплата",
+                DataPropertyName = "Salary"
+            };
+            salaryColumn.DefaultCellStyle.Format = "N2";
+            salaryColumn.DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("ru-RU");
+            tableViewerDgv.Columns.Add(salaryColumn);
+
+            var emailColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Email",
+                HeaderText = "Email",
+                DataPropertyName = "Email"
+            };
+            tableViewerDgv.Columns.Add(emailColumn);
+
+            var phoneColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "PhoneNumber",
+                HeaderText = "Телефон",
+                DataPropertyName = "PhoneNumber"
+            };
+            tableViewerDgv.Columns.Add(phoneColumn);
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void SetupCustomersDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var customerIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "CustomerID",
+                HeaderText = "ID",
+                DataPropertyName = "CustomerID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(customerIdColumn);
+
+            var fullNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "FullName",
+                HeaderText = "ФИО",
+                DataPropertyName = "FullName"
+            };
+            tableViewerDgv.Columns.Add(fullNameColumn);
+
+            var phoneColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "PhoneNumber",
+                HeaderText = "Телефон",
+                DataPropertyName = "PhoneNumber"
+            };
+            tableViewerDgv.Columns.Add(phoneColumn);
+
+            var emailColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Email",
+                HeaderText = "Email",
+                DataPropertyName = "Email"
+            };
+            tableViewerDgv.Columns.Add(emailColumn);
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void SetupPositionsDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+
+            tableViewerDgv.Columns.Clear();
+
+            var positionIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "PositionID",
+                HeaderText = "ID",
+                DataPropertyName = "PositionID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(positionIdColumn);
+
+            var positionNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "PositionName",
+                HeaderText = "Название должности",
+                DataPropertyName = "PositionName"
+            };
+            tableViewerDgv.Columns.Add(positionNameColumn);
+
+            var descriptionColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Description",
+                HeaderText = "Описание",
+                DataPropertyName = "Description"
+            };
+            tableViewerDgv.Columns.Add(descriptionColumn);
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void SetupOrdersDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.AllowUserToDeleteRows = false;
+            tableViewerDgv.Columns.Clear();
+
+            var customerNameColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "CustomerID",
+                HeaderText = "Клиент",
+                DataPropertyName = "CustomerID",
+                ValueMember = "CustomerID",
+                DisplayMember = "FullName",
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing,
+            };
+            tableViewerDgv.Columns.Add(customerNameColumn);
+
+            var employeeNameColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "EmployeeID",
+                HeaderText = "Сотрудник",
+                DataPropertyName = "EmployeeID",
+                ValueMember = "EmployeeID",
+                DisplayMember = "FullName",
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing,
+            };
+            tableViewerDgv.Columns.Add(employeeNameColumn);
+
+
+            var orderStatusColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "OrderStatusID",
+                HeaderText = "Статус заказа",
+                DataPropertyName = "OrderStatusID",
+                ValueMember = "OrderStatusID",
+                DisplayMember = "StatusName"
+            };
+            tableViewerDgv.Columns.Add(orderStatusColumn);
+
+            var orderDateColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "OrderDate",
+                HeaderText = "Дата заказа",
+                DataPropertyName = "OrderDate"
+            };
+            orderDateColumn.DefaultCellStyle.Format = "dd.MM.yyyy HH:mm";
+            tableViewerDgv.Columns.Add(orderDateColumn);
+
+            var tableColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "TableID",
+                HeaderText = "Столик",
+                DataPropertyName = "TableID",
+                ValueMember = "TableID",
+            };
+            tableViewerDgv.Columns.Add(tableColumn);
+
+            var totalAmountColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "TotalAmount",
+                HeaderText = "Стоимость",
+                DataPropertyName = "TotalAmount",
+                ReadOnly = true,
+                ToolTipText = "Рассчитывается\nавтоматически"
+            };
+            totalAmountColumn.DefaultCellStyle.Format = "N2";
+            totalAmountColumn.DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("ru-RU");
+            tableViewerDgv.Columns.Add(totalAmountColumn);
+
+            tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit;
+
+        }
+
+        private void SetupOrderItemsDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.AllowUserToDeleteRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var orderItemIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "OrderItemID",
+                HeaderText = "OrderItem ID",
+                DataPropertyName = "OrderItemID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(orderItemIdColumn);
+
+            var orderIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "OrderID",
+                HeaderText = "OrderID",
+                DataPropertyName = "OrderID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(orderIdColumn);
+
+            var dishNameColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "DishID",
+                HeaderText = "Блюдо",
+                DataPropertyName = "DishID",
+                ValueMember = "DishID",
+                DisplayMember = "DishName",
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+            };
+            tableViewerDgv.Columns.Add(dishNameColumn);
+
+            var quantityColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Quantity",
+                HeaderText = "Количество",
+                DataPropertyName = "Quantity"
+            };
+            tableViewerDgv.Columns.Add(quantityColumn);
+
+            var priceColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Price",
+                HeaderText = "Цена",
+                DataPropertyName = "Price",
+                ReadOnly = true,
+                ToolTipText = "Рассчитывается\nавтоматически"
+            };
+            tableViewerDgv.Columns.Add(priceColumn);
+
+            tableViewerDgv.CellValueChanged += tableViewerDgv_CellValueChanged_OrderItems;
+            tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_OrderItems;
+        }
+
+        private void tableViewerDgv_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            tableViewerDgv.EndEdit();
+        }
+
+        private void LoadData()
+        {
+            using (var context = Program.context)
+            {
+                var positions = context.Positions.ToList();
+                var positionColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["PositionID"];
+                if (positionColumn != null)
+                {
+                    positionColumn.DataSource = positions;
+                    positionColumn.DisplayMember = "PositionName";
+                    positionColumn.ValueMember = "PositionID";
+                }
+
+                var employees = context.Employees
+                    .Include(e => e.Position)
+                    .ToList()
+                    .Select(e => new EmployeeViewModel
+                    {
+                        EmployeeID = e.EmployeeID,
+                        FullName = $"{e.FirstName} {e.LastName}",
+                        PositionID = e.PositionID,
+                        HireDate = e.HireDate,
+                        Salary = e.Salary,
+                        Email = e.Email,
+                        PhoneNumber = e.PhoneNumber
+                    }).ToList();
+
+                tableViewerDgv.DataSource = new BindingList<EmployeeViewModel>(employees);
+            }
+        }
+
+        private void LoadCustomersData()
+        {
+            using (var context = Program.context)
+            {
+                var customers = context.Customers
+                    .ToList()
+                    .Select(c => new
+                    {
+                        CustomerID = c.CustomerID,
+                        FullName = $"{c.FirstName} {c.LastName}",
+                        PhoneNumber = c.PhoneNumber,
+                        Email = c.Email
+                    })
+                    .ToList();
+
+                tableViewerDgv.DataSource = new BindingList<dynamic>(customers.Cast<dynamic>().ToList());
+            }
+        }
+
+        private void LoadPositionsData()
+        {
+            using (var context = Program.context)
+            {
+                var positions = context.Positions.ToList();
+                tableViewerDgv.DataSource = new BindingList<Position>(positions);
+            }
+        }
+
+        private void LoadOrdersData()
+        {
+            using (var context = Program.context)
+            {
+                var ordersQuery = context.Orders
+                    .Include(o => o.Customer)
+                    .Include(o => o.Employee)
+                    .Include(o => o.OrderStatu);
+
+                if (customerIdForOrders.HasValue)
+                {
+                    ordersQuery = ordersQuery.Where(o => o.CustomerID == customerIdForOrders.Value);
+                }
+
+                var orders = ordersQuery.ToList();
+
+                var customerColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["CustomerID"];
+                if (customerColumn != null)
+                {
+                    var customers = context.Customers
+                        .ToList()
+                        .Select(c => new
+                        {
+                            CustomerID = c.CustomerID,
+                            FullName = $"{c.FirstName} {c.LastName}"
+                        }).ToList();
+                    customerColumn.DataSource = customers;
+                }
+
+                var employeeColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["EmployeeID"];
+                if (employeeColumn != null)
+                {
+                    var employees = context.Employees
+                        .ToList()
+                        .Select(e => new
+                        {
+                            EmployeeID = e.EmployeeID,
+                            FullName = $"{e.FirstName} {e.LastName}"
+                        }).ToList();
+
+                    employeeColumn.DataSource = employees;
+                }
+
+                var tableColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["TableID"];
+                if (tableColumn != null)
+                {
+                    var tableDisplayList = context.Tables.ToList().Select(t => new
+                    {
+                        TableID = t.TableID,
+                        DisplayString = $"{t.TableNumber} (Мест: {t.Capacity})"
+                    }).ToList();
+
+                    tableColumn.DataSource = tableDisplayList;
+                    tableColumn.DisplayMember = "DisplayString";
+                    tableColumn.ValueMember = "TableID";
+                }
+
+                var orderViewModels = orders.Select(o => new OrderViewModel
+                {
+                    OrderID = o.OrderID,
+                    CustomerID = (int)o.CustomerID,
+                    CustomerName = o.Customer != null ? $"{o.Customer.FirstName} {o.Customer.LastName}" : "N/A",
+                    EmployeeID = o.EmployeeID,
+                    EmployeeName = o.Employee != null ? $"{o.Employee.FirstName} {o.Employee.LastName}" : null,
+                    OrderStatusID = o.OrderStatusID,
+                    OrderDate = o.OrderDate,
+                    TableID = (int)o.TableID,
+                    TableNumber = context.Tables.Where(t => t.TableID == o.TableID).Select(t => t.TableNumber).FirstOrDefault(),
+                    TotalAmount = o.TotalAmount
+                }).ToList();
+
+                tableViewerDgv.DataSource = new BindingList<OrderViewModel>(orderViewModels);
+
+                var orderStatuses = context.OrderStatus.ToList();
+                var orderStatusColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["OrderStatusID"];
+                if (orderStatusColumn != null)
+                {
+                    orderStatusColumn.DataSource = orderStatuses;
+                    orderStatusColumn.DisplayMember = "StatusName";
+                    orderStatusColumn.ValueMember = "OrderStatusID";
+                }
+            }
+        }
+
+        //Новая функция для загрузки блюд для выбранного заказа
+        private void LoadOrderItemsData(int orderID)
+        {
+            using (var context = Program.context)
+            {
+                var orderItems = context.OrderItems
+                                      .Include(oi => oi.Dish) // Загружаем информацию о блюде
+                                      .Where(oi => oi.OrderID == orderID)
+                                      .ToList();
+
+                // Получаем список блюд для ComboBoxColumn
+                var dishList = context.Dishes.ToList();
+                var dishColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["DishID"];
+                if (dishColumn != null)
+                {
+                    dishColumn.DataSource = dishList;
+                }
+
+                tableViewerDgv.DataSource = new BindingList<OrderItem>(orderItems);
+
+                // Обновляем цену для каждой строки
+                foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                {
+                    UpdatePrice(row);
+                }
+
+            }
+        }
+
+        private void tableViewerDgv_CellValueChanged_OrderItems(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+                UpdatePrice(tableViewerDgv.Rows[e.RowIndex]);
+        }
+
+        private void tableViewerDgv_CellEndEdit_OrderItems(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+                UpdatePrice(tableViewerDgv.Rows[e.RowIndex]);
+        }
+
+        private void UpdatePrice(DataGridViewRow row)
+        {
+            if (row.IsNewRow) return;
+
+            DataGridViewCell dishIdCell = row.Cells["DishID"];
+            if (dishIdCell.Value == null || !(dishIdCell.Value is int))
+            {
+                row.Cells["Price"].Value = 0;
+                return;
+            }
+            int dishID = (int)dishIdCell.Value;
+
+            DataGridViewCell quantityCell = row.Cells["Quantity"];
+            if (quantityCell.Value == null || !int.TryParse(quantityCell.Value.ToString(), out int quantity))
+            {
+                row.Cells["Price"].Value = 0;
+                return;
+            }
+
+            using (var context = Program.context)
+            {
+                Dish dish = context.Dishes.Find(dishID);
+                if (dish != null)
+                {
+                    decimal price = dish.Price * quantity;
+                    row.Cells["Price"].Value = price;
+                }
+                else
+                    row.Cells["Price"].Value = 0;
+            }
+        }
+
+        private void AllowUserToAddNewRowInOrderDataGridView()
+        {
+            tableViewerDgv.AllowUserToAddRows = true;
+        }
+
+        private void tableViewerDgv_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            if (e.Exception is FormatException || e.Exception is ArgumentException)
+                e.Cancel = true;
+        }
+
+        private void tableViewerDgv_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (tableViewerDgv.IsCurrentCellDirty && tableViewerDgv.CurrentCell is DataGridViewComboBoxCell)
+            {
+                tableViewerDgv.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                isChanged = true;
+                saveButton.Enabled = true;
+            }
+        }
+
+        private void tableViewerDgv_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            isChanged = true;
+            saveButton.Enabled = true;
+        }
+
+        private void tableViewerDgv_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            isChanged = true;
+            saveButton.Enabled = true;
+        }
+
+        private void positionsButton_Click(object sender, EventArgs e)
+        {
+            OpenPositionsForm();
+        }
+
+        private void OpenPositionsForm()
+        {
+            fmTableViewer positionsForm = new fmTableViewer(true);
+            positionsForm.Show();
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (isPositionsMode)
+                SavePositionsData();
+            else if (isCustomersMode)
+                SaveCustomersData();
+            else if (isOrdersMode)
+                SaveOrdersData();
+            else if (isOrderItemsMode)
+                SaveOrderItemsData();
+            else
+                SaveEmployeesData();
+        }
+
+        private void SaveOrderItemsData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+                        int orderItemId = Convert.ToInt32(row.Cells["OrderItemID"].Value ?? 0);
+                        OrderItem orderItem = context.OrderItems.Find(orderItemId);
+                        if (orderItem != null)
+                        {
+                            orderItem.DishID = (int)row.Cells["DishID"].Value;
+                            orderItem.Quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
+                        }
+                        else
+                        {
+                            orderItem = new OrderItem();
+                            orderItem.OrderID = selectedOrderID.Value;
+                            orderItem.DishID = (int)row.Cells["DishID"].Value;
+                            orderItem.Quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
+                            context.OrderItems.Add(orderItem);
+                        }
+                    }
+
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        if (row.IsNewRow)
+                        {
+                            var dishID = row.Cells["DishID"].Value;
+                            var quantity = row.Cells["Quantity"].Value;
+
+                            if (dishID != null && quantity != null)
+                            {
+                                var orderItem = new OrderItem
+                                {
+                                    OrderID = (int)selectedOrderID,
+                                    DishID = (int)dishID,
+                                    Quantity = (int)quantity
+                                };
+                                context.OrderItems.Add(orderItem);
+                            }
+                            continue;
+                        }
+
+                        var orderItemId = Convert.ToInt32(row.Cells["OrderItemID"].Value);
+                        var orderItemToDelete = context.OrderItems.Find(orderItemId);
+
+                        if (orderItemToDelete == null) continue;
+                        context.OrderItems.Remove(orderItemToDelete);
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+
+                    MessageBox.Show("Данные чека клиента успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadOrderItemsData(selectedOrderID ?? 0);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении чека клиента: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveEmployeesData()
+        {
+            if (!ValidateData())
+                return;
+
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var employeeId = Convert.ToInt32(row.Cells["EmployeeID"].Value);
+                        var employee = context.Employees.Find(employeeId);
+
+                        if (employee != null)
+                        {
+                            var fullName = row.Cells["FullName"].Value.ToString().Split(' ');
+                            employee.FirstName = fullName[0];
+                            employee.LastName = fullName.Length > 1 ? fullName[1] : "";
+
+                            employee.PositionID = (int)row.Cells["PositionID"].Value;
+
+
+                            employee.HireDate = Convert.ToDateTime(row.Cells["HireDate"].Value);
+                            employee.Salary = decimal.Parse(row.Cells["Salary"].Value?.ToString()?.Replace(" ", "") ?? "0");
+                            employee.Email = row.Cells["Email"].Value?.ToString();
+                            employee.PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString();
+                        }
+                        else
+                        {
+                            var fullName = row.Cells["FullName"].Value.ToString().Split(' ');
+                            var positionValue = row.Cells["PositionID"].Value;
+                            int positionId = (int)positionValue;
+
+
+                            var newEmployee = new Employee
+                            {
+                                FirstName = fullName[0],
+                                LastName = fullName.Length > 1 ? fullName[1] : "",
+                                PositionID = positionId,
+                                HireDate = Convert.ToDateTime(row.Cells["HireDate"].Value),
+                                Salary = decimal.Parse(row.Cells["Salary"].Value?.ToString()?.Replace(" ", "") ?? "0"),
+                                Email = row.Cells["Email"].Value?.ToString(),
+                                PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString()
+                            };
+
+                            context.Employees.Add(newEmployee);
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+
+                    MessageBox.Show("Данные успешно сохранены", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveCustomersData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var customerId = Convert.ToInt32(row.Cells["CustomerID"].Value ?? 0);
+                        var customer = context.Customers.Find(customerId);
+
+                        if (customer != null)
+                        {
+                            var fullName = row.Cells["FullName"].Value?.ToString()?.Split(' ');
+                            if (fullName != null && fullName.Length >= 2)
+                            {
+                                customer.FirstName = fullName[0];
+                                customer.LastName = string.Join(" ", fullName.Skip(1));
+                            }
+                            else if (fullName != null && fullName.Length == 1)
+                            {
+                                customer.FirstName = fullName[0];
+                                customer.LastName = "";
+                            }
+                            else
+                            {
+                                MessageBox.Show("Необходимо ввести Имя и Фамилию", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+
+
+                            customer.PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString();
+                            customer.Email = row.Cells["Email"].Value?.ToString();
+                        }
+                        else
+                        {
+                            var fullName = row.Cells["FullName"].Value?.ToString()?.Split(' ');
+
+                            if (fullName != null && fullName.Length >= 2)
+                            {
+                                var newCustomer = new Customer
+                                {
+                                    FirstName = fullName[0],
+                                    LastName = string.Join(" ", fullName.Skip(1)),
+                                    PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString(),
+                                    Email = row.Cells["Email"].Value?.ToString()
+                                };
+
+                                context.Customers.Add(newCustomer);
+                            }
+                            else if (fullName != null && fullName.Length == 1)
+                            {
+                                var newCustomer = new Customer
+                                {
+                                    FirstName = fullName[0],
+                                    LastName = "",
+                                    PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString(),
+                                    Email = row.Cells["Email"].Value?.ToString()
+                                };
+
+                                context.Customers.Add(newCustomer);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Необходимо ввести Имя и Фамилию", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+                    MessageBox.Show("Данные о клиентах успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении клиентов: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SavePositionsData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var positionId = Convert.ToInt32(row.Cells["PositionID"].Value ?? 0);
+                        var position = context.Positions.Find(positionId);
+
+                        if (position != null)
+                        {
+                            position.PositionName = row.Cells["PositionName"].Value?.ToString();
+                            position.Description = row.Cells["Description"].Value?.ToString();
+                        }
+                        else
+                        {
+                            var newPosition = new Position
+                            {
+                                PositionName = row.Cells["PositionName"].Value?.ToString(),
+                                Description = row.Cells["Description"].Value?.ToString()
+                            };
+                            context.Positions.Add(newPosition);
+                        }
+                    }
+
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+
+                    MessageBox.Show("Данные о должностях успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении должностей: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveOrdersData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        OrderViewModel orderViewModel = row.DataBoundItem as OrderViewModel;
+
+                        int? customerId = row.Cells["CustomerID"].Value as int?;
+                        int? employeeId = row.Cells["EmployeeID"].Value as int?;
+                        int? orderStatusId = row.Cells["OrderStatusID"].Value as int?;
+                        DateTime? orderDate = row.Cells["OrderDate"].Value as DateTime?;
+                        int? tableId = row.Cells["TableID"].Value as int?;
+                        decimal? totalAmount = row.Cells["TotalAmount"].Value as decimal?;
+
+                        if (orderViewModel == null)
+                        {
+                            Order order = new Order();
+                            order.CustomerID = (int)customerId;
+                            order.EmployeeID = (int)employeeId;
+                            order.OrderStatusID = (int)orderStatusId;
+                            order.OrderDate = (DateTime)orderDate;
+                            order.TableID = (int)tableId;
+                            order.TotalAmount = 0;
+
+                            context.Orders.Add(order);
+                        }
+                        else
+                        {
+
+                            var orderId = orderViewModel.OrderID;
+                            var order = context.Orders.Find(orderId);
+
+                            if (order != null)
+                            {
+                                if (row.Cells["OrderStatusID"].Value != null)
+                                {
+                                    order.OrderStatusID = (int)row.Cells["OrderStatusID"].Value;
+                                }
+
+                                if (row.Cells["TableID"].Value != null)
+                                {
+                                    order.TableID = (int)row.Cells["TableID"].Value;
+                                }
+
+                                order.EmployeeID = (int)row.Cells["EmployeeID"].Value;
+
+                            }
+                        }
+
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+
+                    MessageBox.Show("Данные о заказах успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadOrdersData();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении заказов: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private bool ValidateData()
+        {
+            foreach (DataGridViewRow row in tableViewerDgv.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                var fullName = row.Cells["FullName"].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(fullName) || fullName.Split(' ').Length != 2)
+                {
+                    MessageBox.Show("В поле ФИО должно быть ровно 2 слова (Имя и Фамилия)", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(row.Cells["PositionID"].Value?.ToString()) ||
+                    string.IsNullOrWhiteSpace(row.Cells["HireDate"].Value?.ToString()) ||
+                    string.IsNullOrWhiteSpace(row.Cells["Salary"].Value?.ToString()))
+                {
+                    MessageBox.Show("Первые 4 столбца не могут быть пустыми", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(row.Cells["Email"].Value?.ToString()) &&
+                    string.IsNullOrWhiteSpace(row.Cells["PhoneNumber"].Value?.ToString()))
+                {
+                    MessageBox.Show("Должен быть заполнен хотя бы один контакт (Email или Телефон)", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void tableViewerDgv_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            if (tableViewerDgv.Columns["PositionID"] is DataGridViewComboBoxColumn positionColumn && positionColumn.Items.Count > 0)
+            {
+                e.Row.Cells["PositionID"].Value = ((Position)positionColumn.Items[0]).PositionID;
+            }
+        }
+
+        private void tableViewerDgv_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (isOrdersMode)
+            {
+                e.Cancel = true;
+                MessageBox.Show("Удаление заказов запрещено.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!e.Row.IsNewRow)
+            {
+                var employee = e.Row.DataBoundItem as EmployeeViewModel;
+                if (employee != null)
+                {
+                    if (employee.EmployeeID > 0)
+                    {
+                        deletedEmployees.Add(employee);
+                        isChanged = true;
+                        saveButton.Enabled = true;
+                    }
+
+                    ((BindingList<EmployeeViewModel>)tableViewerDgv.DataSource).Remove(employee);
+                }
+            }
+        }
+
+        private void fmTableViewer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isChanged)
+            {
+                DialogResult result = MessageBox.Show("Сохранить изменения внесённые изменения?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    saveButton_Click(sender, e);
+            }
+        }
+
+        private void clientOrderDishesButton_Click(object sender, EventArgs e)
+        {
+            if (isOrdersMode)
+            {
+                if (tableViewerDgv.SelectedCells.Count > 0)
+                {
+                    int rowIndex = tableViewerDgv.SelectedCells[0].RowIndex;
+                    if (rowIndex >= 0 && rowIndex < tableViewerDgv.Rows.Count)
+                    {
+                        DataGridViewRow selectedRow = tableViewerDgv.Rows[rowIndex];
+                        if (selectedRow.DataBoundItem != null)
+                        {
+                            OrderViewModel order = selectedRow.DataBoundItem as OrderViewModel;
+                            if (order != null)
+                            {
+                                fmTableViewer orderItemsForm = new fmTableViewer(false, false, false, order.CustomerID, order.OrderID, true);
+                                orderItemsForm.Show();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Выбранная строка не содержит данных о заказе.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выбранная строка не содержит данных.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Не удалось получить данные.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Пожалуйста, выберите заказ.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+    }
+
+    public class ComboboxItem
+    {
+        public string Text { get; set; }
+        public object Value { get; set; }
+        public override string ToString()
+        {
+            return Text;
+        }
+    }
+
+    public class EmployeeViewModel
+    {
+        public int EmployeeID { get; set; }
+        public string FullName { get; set; }
+        public int PositionID { get; set; }
+        public DateTime HireDate { get; set; }
+        public decimal Salary { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+
+    public class OrderViewModel
+    {
+        public int OrderID { get; set; }
+        public int CustomerID { get; set; }
+        public string CustomerName { get; set; }
+        public int? EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        public int OrderStatusID { get; set; }
+        public string OrderStatus { get; set; }
+        public DateTime OrderDate { get; set; }
+        public int TableID { get; set; }
+        public int TableNumber { get; set; }
+        public decimal TotalAmount { get; set; }
+    }
+}

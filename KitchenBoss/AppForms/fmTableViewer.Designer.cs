@@ -1,6 +1,6 @@
 ﻿namespace KitchenBoss.AppForms
 {
-    partial class fmEmployees
+    partial class fmTableViewer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,19 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fmEmployees));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fmTableViewer));
             this.headerPanel = new System.Windows.Forms.Panel();
             this.headerTitleLabel = new System.Windows.Forms.Label();
             this.headerSubtitleLabel = new System.Windows.Forms.Label();
             this.headerLogoBackPanel = new System.Windows.Forms.Panel();
             this.headerLogoPictureBox = new System.Windows.Forms.PictureBox();
-            this.employeesDgv = new System.Windows.Forms.DataGridView();
+            this.tableViewerDgv = new System.Windows.Forms.DataGridView();
             this.saveButton = new System.Windows.Forms.Button();
             this.positionsButton = new System.Windows.Forms.Button();
+            this.clientOrderDishesButton = new System.Windows.Forms.Button();
             this.headerPanel.SuspendLayout();
             this.headerLogoBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.employeesDgv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tableViewerDgv)).BeginInit();
             this.SuspendLayout();
             // 
             // headerPanel
@@ -98,20 +99,20 @@
             this.headerLogoPictureBox.TabIndex = 0;
             this.headerLogoPictureBox.TabStop = false;
             // 
-            // employeesDgv
+            // tableViewerDgv
             // 
-            this.employeesDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.employeesDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.employeesDgv.Location = new System.Drawing.Point(12, 66);
-            this.employeesDgv.Name = "employeesDgv";
-            this.employeesDgv.Size = new System.Drawing.Size(457, 280);
-            this.employeesDgv.TabIndex = 18;
-            this.employeesDgv.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.employeesDgv_CellValueChanged);
-            this.employeesDgv.CurrentCellDirtyStateChanged += new System.EventHandler(this.employeesDgv_CurrentCellDirtyStateChanged);
-            this.employeesDgv.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.employeesDgv_DataError);
-            this.employeesDgv.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.employeesDgv_DefaultValuesNeeded);
-            this.employeesDgv.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.employeesDgv_UserDeletedRow);
-            this.employeesDgv.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.employeesDgv_UserDeletingRow);
+            this.tableViewerDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.tableViewerDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tableViewerDgv.Location = new System.Drawing.Point(12, 66);
+            this.tableViewerDgv.Name = "tableViewerDgv";
+            this.tableViewerDgv.Size = new System.Drawing.Size(457, 280);
+            this.tableViewerDgv.TabIndex = 18;
+            this.tableViewerDgv.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.tableViewerDgv_CellValueChanged);
+            this.tableViewerDgv.CurrentCellDirtyStateChanged += new System.EventHandler(this.tableViewerDgv_CurrentCellDirtyStateChanged);
+            this.tableViewerDgv.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.tableViewerDgv_DataError);
+            this.tableViewerDgv.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.tableViewerDgv_DefaultValuesNeeded);
+            this.tableViewerDgv.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.tableViewerDgv_UserDeletedRow);
+            this.tableViewerDgv.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.tableViewerDgv_UserDeletingRow);
             // 
             // saveButton
             // 
@@ -154,25 +155,48 @@
             this.positionsButton.UseVisualStyleBackColor = false;
             this.positionsButton.Click += new System.EventHandler(this.positionsButton_Click);
             // 
-            // fmEmployees
+            // clientOrderDishesButton
+            // 
+            this.clientOrderDishesButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clientOrderDishesButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.clientOrderDishesButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
+            this.clientOrderDishesButton.FlatAppearance.BorderSize = 2;
+            this.clientOrderDishesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.clientOrderDishesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.clientOrderDishesButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
+            this.clientOrderDishesButton.Image = global::KitchenBoss.Properties.Resources.regular_orders_x20;
+            this.clientOrderDishesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.clientOrderDishesButton.Location = new System.Drawing.Point(121, 352);
+            this.clientOrderDishesButton.Name = "clientOrderDishesButton";
+            this.clientOrderDishesButton.Size = new System.Drawing.Size(108, 28);
+            this.clientOrderDishesButton.TabIndex = 23;
+            this.clientOrderDishesButton.Text = "Чек клиента";
+            this.clientOrderDishesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.clientOrderDishesButton.UseVisualStyleBackColor = false;
+            this.clientOrderDishesButton.Visible = false;
+            this.clientOrderDishesButton.Click += new System.EventHandler(this.clientOrderDishesButton_Click);
+            // 
+            // fmTableViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(481, 392);
+            this.Controls.Add(this.clientOrderDishesButton);
             this.Controls.Add(this.positionsButton);
-            this.Controls.Add(this.employeesDgv);
+            this.Controls.Add(this.tableViewerDgv);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.headerPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "fmEmployees";
+            this.Name = "fmTableViewer";
             this.ShowIcon = false;
             this.Text = "KitchenBoss - Сотрудники";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmTableViewer_FormClosing);
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
             this.headerLogoBackPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.employeesDgv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tableViewerDgv)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -184,8 +208,9 @@
         private System.Windows.Forms.Label headerSubtitleLabel;
         private System.Windows.Forms.Panel headerLogoBackPanel;
         private System.Windows.Forms.PictureBox headerLogoPictureBox;
-        private System.Windows.Forms.DataGridView employeesDgv;
+        private System.Windows.Forms.DataGridView tableViewerDgv;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button positionsButton;
+        private System.Windows.Forms.Button clientOrderDishesButton;
     }
 }

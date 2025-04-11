@@ -40,6 +40,8 @@
             this.clientsButton = new System.Windows.Forms.Button();
             this.userControlButton = new System.Windows.Forms.Button();
             this.logoutButton = new System.Windows.Forms.Button();
+            this.ordersButton = new System.Windows.Forms.Button();
+            this.tablesButton = new System.Windows.Forms.Button();
             this.headerPanel.SuspendLayout();
             this.headerLogoBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).BeginInit();
@@ -66,7 +68,7 @@
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(0, 0);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(354, 60);
+            this.headerPanel.Size = new System.Drawing.Size(487, 60);
             this.headerPanel.TabIndex = 1;
             // 
             // headerTitleLabel
@@ -104,7 +106,7 @@
             // 
             this.loginAndPositionLabel.BackColor = System.Drawing.Color.Transparent;
             this.loginAndPositionLabel.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
-            this.loginAndPositionLabel.Location = new System.Drawing.Point(12, 165);
+            this.loginAndPositionLabel.Location = new System.Drawing.Point(9, 165);
             this.loginAndPositionLabel.Name = "loginAndPositionLabel";
             this.loginAndPositionLabel.Size = new System.Drawing.Size(194, 38);
             this.loginAndPositionLabel.TabIndex = 4;
@@ -122,7 +124,7 @@
             this.employeesButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 20F);
             this.employeesButton.Image = global::KitchenBoss.Properties.Resources.regular_employee_x30;
             this.employeesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.employeesButton.Location = new System.Drawing.Point(164, 66);
+            this.employeesButton.Location = new System.Drawing.Point(297, 66);
             this.employeesButton.Name = "employeesButton";
             this.employeesButton.Size = new System.Drawing.Size(178, 45);
             this.employeesButton.TabIndex = 15;
@@ -142,7 +144,7 @@
             this.dishesButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 20F);
             this.dishesButton.Image = global::KitchenBoss.Properties.Resources.regular_dishes_x30;
             this.dishesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.dishesButton.Location = new System.Drawing.Point(12, 117);
+            this.dishesButton.Location = new System.Drawing.Point(164, 66);
             this.dishesButton.Name = "dishesButton";
             this.dishesButton.Size = new System.Drawing.Size(127, 45);
             this.dishesButton.TabIndex = 16;
@@ -183,9 +185,9 @@
             this.userControlButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 20F);
             this.userControlButton.Image = global::KitchenBoss.Properties.Resources.regular_control_panel_x30;
             this.userControlButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.userControlButton.Location = new System.Drawing.Point(145, 117);
+            this.userControlButton.Location = new System.Drawing.Point(282, 117);
             this.userControlButton.Name = "userControlButton";
-            this.userControlButton.Size = new System.Drawing.Size(197, 45);
+            this.userControlButton.Size = new System.Drawing.Size(193, 45);
             this.userControlButton.TabIndex = 17;
             this.userControlButton.Text = "Управ. Польз";
             this.userControlButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -203,7 +205,7 @@
             this.logoutButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
             this.logoutButton.Image = global::KitchenBoss.Properties.Resources.regular_logout_x20;
             this.logoutButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.logoutButton.Location = new System.Drawing.Point(265, 175);
+            this.logoutButton.Location = new System.Drawing.Point(398, 175);
             this.logoutButton.Name = "logoutButton";
             this.logoutButton.Size = new System.Drawing.Size(77, 28);
             this.logoutButton.TabIndex = 22;
@@ -212,11 +214,53 @@
             this.logoutButton.UseVisualStyleBackColor = false;
             this.logoutButton.Click += new System.EventHandler(this.logoutButton_Click);
             // 
+            // ordersButton
+            // 
+            this.ordersButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ordersButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.ordersButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
+            this.ordersButton.FlatAppearance.BorderSize = 2;
+            this.ordersButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.ordersButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ordersButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 20F);
+            this.ordersButton.Image = global::KitchenBoss.Properties.Resources.regular_orders_x30;
+            this.ordersButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ordersButton.Location = new System.Drawing.Point(12, 117);
+            this.ordersButton.Name = "ordersButton";
+            this.ordersButton.Size = new System.Drawing.Size(136, 45);
+            this.ordersButton.TabIndex = 23;
+            this.ordersButton.Text = "Заказы";
+            this.ordersButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ordersButton.UseVisualStyleBackColor = false;
+            this.ordersButton.Click += new System.EventHandler(this.ordersButton_Click);
+            // 
+            // tablesButton
+            // 
+            this.tablesButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tablesButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.tablesButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
+            this.tablesButton.FlatAppearance.BorderSize = 2;
+            this.tablesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.tablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.tablesButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 20F);
+            this.tablesButton.Image = global::KitchenBoss.Properties.Resources.regular_tables_x30;
+            this.tablesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tablesButton.Location = new System.Drawing.Point(154, 117);
+            this.tablesButton.Name = "tablesButton";
+            this.tablesButton.Size = new System.Drawing.Size(122, 45);
+            this.tablesButton.TabIndex = 24;
+            this.tablesButton.Text = "Столы";
+            this.tablesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tablesButton.UseVisualStyleBackColor = false;
+            this.tablesButton.Click += new System.EventHandler(this.tablesButton_Click);
+            // 
             // fmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(354, 209);
+            this.ClientSize = new System.Drawing.Size(487, 210);
+            this.Controls.Add(this.tablesButton);
+            this.Controls.Add(this.ordersButton);
             this.Controls.Add(this.loginAndPositionLabel);
             this.Controls.Add(this.logoutButton);
             this.Controls.Add(this.userControlButton);
@@ -253,5 +297,7 @@
         private System.Windows.Forms.Button clientsButton;
         private System.Windows.Forms.Button userControlButton;
         private System.Windows.Forms.Button logoutButton;
+        private System.Windows.Forms.Button ordersButton;
+        private System.Windows.Forms.Button tablesButton;
     }
 }

@@ -58,23 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppForms\fmClients.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AppForms\fmClients.Designer.cs">
-      <DependentUpon>fmClients.cs</DependentUpon>
-    </Compile>
     <Compile Include="AppForms\fmDishes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AppForms\fmDishes.Designer.cs">
       <DependentUpon>fmDishes.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppForms\fmEmployees.cs">
+    <Compile Include="AppForms\fmTableViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AppForms\fmEmployees.Designer.cs">
-      <DependentUpon>fmEmployees.cs</DependentUpon>
+    <Compile Include="AppForms\fmTableViewer.Designer.cs">
+      <DependentUpon>fmTableViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="AppForms\fmLogin.cs">
       <SubType>Form</SubType>
@@ -109,14 +103,11 @@
     <Compile Include="AppModels\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AppForms\fmClients.resx">
-      <DependentUpon>fmClients.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmDishes.resx">
       <DependentUpon>fmDishes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AppForms\fmEmployees.resx">
-      <DependentUpon>fmEmployees.cs</DependentUpon>
+    <EmbeddedResource Include="AppForms\fmTableViewer.resx">
+      <DependentUpon>fmTableViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmLogin.resx">
       <DependentUpon>fmLogin.cs</DependentUpon>
@@ -184,7 +175,12 @@
     <None Include="Resources\regular_employee_x30.png" />
     <None Include="Resources\regular_dishes_x30.png" />
     <None Include="Resources\regular_control_panel_x30.png" />
+    <None Include="Resources\regular_orders_x30.png" />
+    <None Include="Resources\regular_tables_x30.png" />
     <Content Include="Shapkin_KitchenBoss.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AppData\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

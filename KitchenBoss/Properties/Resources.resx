@@ -166,8 +166,14 @@
   <data name="regular_orders_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_orders_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="regular_orders_x30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_orders_x30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="regular_save_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_save_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="regular_tables_x30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\regular_tables_x30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="regular_x_x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\regular_x_x20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

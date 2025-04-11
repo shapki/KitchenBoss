@@ -6,8 +6,8 @@ namespace KitchenBoss.AppForms
 {
     /// <summary>
     /// TODO: Подогнать под требования
-    /// TODO: Написать код для кнопок-переходов к другим формам
     /// TODO: Написать summary-комментарии
+    /// TODO: Сделать форму для изменения столиков
     /// </summary>
     public partial class fmMain : Form
     {
@@ -86,9 +86,8 @@ namespace KitchenBoss.AppForms
             var formsToClose = new[]
             {
                 typeof(fmUserControl),
-                typeof(fmClients),
                 typeof(fmDishes),
-                typeof(fmEmployees)
+                typeof(fmTableViewer)
             };
 
             Form[] openForms = Application.OpenForms.Cast<Form>().ToArray();
@@ -137,7 +136,7 @@ namespace KitchenBoss.AppForms
 
         private void employeesButton_Click(object sender, System.EventArgs e)
         {
-            fmEmployees employeesForm = new fmEmployees();
+            fmTableViewer employeesForm = new fmTableViewer();
             employeesForm.Show();
         }
 
@@ -155,8 +154,19 @@ namespace KitchenBoss.AppForms
 
         private void clientsButton_Click(object sender, System.EventArgs e)
         {
-            fmClients clientsForm = new fmClients();
-            clientsForm.Show();
+            fmTableViewer employeesForm = new fmTableViewer(false, true);
+            employeesForm.Show();
+        }
+
+        private void ordersButton_Click(object sender, EventArgs e)
+        {
+            fmTableViewer ordersForm = new fmTableViewer(false, false, true);
+            ordersForm.Show();
+        }
+
+        private void tablesButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
