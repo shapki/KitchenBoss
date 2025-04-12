@@ -193,9 +193,9 @@ namespace KitchenBoss.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap regular_login_x20 {
+        internal static System.Drawing.Bitmap regular_login_x20white {
             get {
-                object obj = ResourceManager.GetObject("regular_login_x20", resourceCulture);
+                object obj = ResourceManager.GetObject("regular_login_x20white", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

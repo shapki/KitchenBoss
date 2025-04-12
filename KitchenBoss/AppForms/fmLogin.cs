@@ -1,6 +1,7 @@
 ﻿using KitchenBoss.Properties;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,7 +15,7 @@ namespace KitchenBoss.AppForms
     /// </summary>
     public partial class fmLogin : Form
     {
-        private bool _showingPassword = false;
+        private bool _showingPassword = true;
 
         public fmLogin()
         {
@@ -133,6 +134,24 @@ namespace KitchenBoss.AppForms
         private void fmLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
             CloseFormEvent(e);
+        }
+
+        private void usernameTextBox_Enter(object sender, EventArgs e)
+        {
+            if (usernameTextBox.Text == "Телефон или почта")
+            {
+                usernameTextBox.Text = "";
+                usernameTextBox.ForeColor = Color.FromArgb(30, 30, 30);
+            }
+        }
+
+        private void usernameTextBox_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(usernameTextBox.Text))
+            {
+                usernameTextBox.Text = "Телефон или почта";
+                usernameTextBox.ForeColor = Color.FromArgb(150, 150, 150);
+            }
         }
     }
 }

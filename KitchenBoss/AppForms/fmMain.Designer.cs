@@ -268,7 +268,7 @@
             this.Controls.Add(this.dishesButton);
             this.Controls.Add(this.employeesButton);
             this.Controls.Add(this.headerPanel);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "fmMain";

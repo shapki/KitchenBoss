@@ -177,6 +177,7 @@
     <None Include="Resources\regular_control_panel_x30.png" />
     <None Include="Resources\regular_orders_x30.png" />
     <None Include="Resources\regular_tables_x30.png" />
+    <None Include="Resources\regular_login_x20white.png" />
     <Content Include="Shapkin_KitchenBoss.sql" />
   </ItemGroup>
   <ItemGroup>
