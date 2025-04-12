@@ -20,19 +20,6 @@ namespace KitchenBoss.AppForms
         public fmLogin()
         {
             InitializeComponent();
-            HelpButtonClicked += HelpButton_Click;
-        }
-
-        private void HelpButton_Click(object sender, CancelEventArgs e)
-        {
-            if (MessageBox.Show("KitchenBoss - это приложение, предназначенное для автоматизации ключевых бизнес-процессов в ресторане." +
-                "\nПриложение позволяет управлять:" +
-                "\n• Меню и ингредиентами" +
-                "\n• Сотрудниками и должностями" +
-                "\n• Заказами и статусами" +
-                "\n• Клиентами и столиками" +
-                "\n• Финансовыми операциями (частично)", "KitchenBoss - Информация", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-                e.Cancel = true;
         }
 
         private void showPasswordPictureBox_Click(object sender, EventArgs e)
