@@ -134,7 +134,7 @@
             this.employeesButton.Name = "employeesButton";
             this.employeesButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.employeesButton.Size = new System.Drawing.Size(152, 45);
-            this.employeesButton.TabIndex = 15;
+            this.employeesButton.TabIndex = 16;
             this.employeesButton.Text = "Сотрудники";
             this.employeesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.employeesButton.UseVisualStyleBackColor = false;
@@ -155,7 +155,7 @@
             this.dishesButton.Name = "dishesButton";
             this.dishesButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.dishesButton.Size = new System.Drawing.Size(115, 45);
-            this.dishesButton.TabIndex = 16;
+            this.dishesButton.TabIndex = 15;
             this.dishesButton.Text = "Блюда";
             this.dishesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.dishesButton.UseVisualStyleBackColor = false;
@@ -198,7 +198,7 @@
             this.userControlButton.Name = "userControlButton";
             this.userControlButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.userControlButton.Size = new System.Drawing.Size(152, 45);
-            this.userControlButton.TabIndex = 17;
+            this.userControlButton.TabIndex = 19;
             this.userControlButton.Text = "Упр. польз";
             this.userControlButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.userControlButton.UseVisualStyleBackColor = false;
@@ -219,7 +219,7 @@
             this.logoutButton.Location = new System.Drawing.Point(323, 136);
             this.logoutButton.Name = "logoutButton";
             this.logoutButton.Size = new System.Drawing.Size(90, 30);
-            this.logoutButton.TabIndex = 22;
+            this.logoutButton.TabIndex = 20;
             this.logoutButton.Text = "Выйти";
             this.logoutButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.logoutButton.UseVisualStyleBackColor = false;
@@ -240,7 +240,7 @@
             this.ordersButton.Name = "ordersButton";
             this.ordersButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ordersButton.Size = new System.Drawing.Size(131, 45);
-            this.ordersButton.TabIndex = 23;
+            this.ordersButton.TabIndex = 17;
             this.ordersButton.Text = "Заказы";
             this.ordersButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ordersButton.UseVisualStyleBackColor = false;
@@ -261,7 +261,7 @@
             this.tablesButton.Name = "tablesButton";
             this.tablesButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tablesButton.Size = new System.Drawing.Size(115, 45);
-            this.tablesButton.TabIndex = 24;
+            this.tablesButton.TabIndex = 18;
             this.tablesButton.Text = "Столы";
             this.tablesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tablesButton.UseVisualStyleBackColor = false;
