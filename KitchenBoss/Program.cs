@@ -21,8 +21,10 @@ namespace KitchenBoss.AppForms
 
             if (!context.Users.Any())
             {
-                MessageBox.Show("В базе данных нет пользователей. Необходимо создать хотя-бы первого пользователя (менеджера).", "Первоначальная настройка", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                fmUserControl userControlForm = new fmUserControl();
+                MessageBox.Show("В базе данных нет пользователей. Необходимо создать менеджера!", "Первоначальная настройка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //fmUserControl userControlForm = new fmUserControl();
+                //userControlForm.ShowDialog();
+                fmTableViewer userControlForm = new fmTableViewer(false, false, false, null, null, false, true, true);
                 userControlForm.ShowDialog();
             }
 

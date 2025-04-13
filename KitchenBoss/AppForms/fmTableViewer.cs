@@ -6,6 +6,8 @@ using System.Data.Entity;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
@@ -14,6 +16,9 @@ namespace KitchenBoss.AppForms
     /// TODO: Подогнать под требования
     /// TODO: Написать summary-комментарии
     /// TODO: Запретить редактирование чеков у заказов со статусом "Отменен" и "Закрыт"
+    /// TODO: Сделать таблицу Клиентов редактируемой
+    /// TODO: Сделать таблицу Управления Пользователями редактируемой (редачится только если прилетел onlyManager)
+    /// TODO: Исправить вывод должности в таблице Управления Пользователями (должна выводиться после выбора сотрудника и при подгрузке данных)
     /// </summary>
     public partial class fmTableViewer : Form
     {
@@ -25,6 +30,7 @@ namespace KitchenBoss.AppForms
         private bool isOrderItemsMode = false;
         private int? customerIdForOrders = null;
         private int? selectedOrderID = null;
+        private bool isUserControlMode = false;
 
         public fmTableViewer()
         {
@@ -33,15 +39,17 @@ namespace KitchenBoss.AppForms
             LoadData();
         }
 
-        public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false, int? customerId = null, int? orderId = null, bool orderItemsMode = false)
+        public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false, int? customerId = null, int? orderId = null, bool orderItemsMode = false, bool userControlMode = false, bool userControlOnlyManager = false)
         {
             InitializeComponent();
+
             isPositionsMode = positionsMode;
             isCustomersMode = customerMode;
             isOrdersMode = ordersMode;
             isOrderItemsMode = orderItemsMode;
             customerIdForOrders = customerId;
             selectedOrderID = orderId;
+            isUserControlMode = userControlMode;
 
             if (isPositionsMode)
             {
@@ -87,27 +95,31 @@ namespace KitchenBoss.AppForms
                 SetupOrderItemsDataGridView();
                 LoadOrderItemsData(selectedOrderID ?? 0);
             }
+            else if (userControlMode && userControlOnlyManager)
+            {
+                Text = "KitchenBoss - Добавление менеджера";
+                headerSubtitleLabel.Text = "Добавление менеджера";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                SetupUserControlDataGridView(true);
+                LoadUserData(true);
+                tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_UserControl;
+            }
+            else if (userControlMode)
+            {
+                Text = "KitchenBoss - Управление пользователями";
+                headerSubtitleLabel.Text = "Управление пользователями";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                SetupUserControlDataGridView(false);
+                LoadUserData(false);
+                tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_UserControl;
+            }
             else
             {
                 SetupDataGridView();
                 LoadData();
             }
-
-            if (isOrderItemsMode && customerId.HasValue)
-            {
-                using (var context = Program.context)
-                {
-                    var customer = context.Customers.Find(customerId.Value);
-                    if (customer != null)
-                    {
-                        Text = $"KitchenBoss - {customer.FirstName} {customer.LastName} - Чек";
-                        headerSubtitleLabel.Text = $"{customer.FirstName} {customer.LastName} - чек";
-                    }
-                    else
-                        headerSubtitleLabel.Text = "Чек";
-                }
-            }
-
         }
 
         private void SetupDataGridView()
@@ -388,9 +400,96 @@ namespace KitchenBoss.AppForms
             tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_OrderItems;
         }
 
+        private void SetupUserControlDataGridView(bool onlyManager)
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var fullNameColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "EmployeeID",
+                HeaderText = "ФИО",
+                DataPropertyName = "EmployeeID",
+                DisplayMember = "FullName",
+                ValueMember = "EmployeeID"
+            };
+            tableViewerDgv.Columns.Add(fullNameColumn);
+
+            var passwordColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Password",
+                HeaderText = "Пароль",
+                DataPropertyName = "Password"
+            };
+            tableViewerDgv.Columns.Add(passwordColumn);
+
+            var positionColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "PositionName",
+                HeaderText = "Должность",
+                DataPropertyName = "PositionName",
+                ReadOnly = true
+            };
+            tableViewerDgv.Columns.Add(positionColumn);
+
+            using (var context = Program.context)
+            {
+                var employees = context.Employees
+                    .Include(e => e.Position)
+                    .ToList()
+                    .Select(e => new
+                    {
+                        EmployeeID = e.EmployeeID,
+                        FullName = $"{e.FirstName} {e.LastName}",
+                        PositionName = e.Position?.PositionName
+                    })
+                    .ToList();
+                fullNameColumn.DataSource = employees;
+                fullNameColumn.DisplayMember = "FullName";
+                fullNameColumn.ValueMember = "EmployeeID";
+            }
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void TableViewerDgv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (tableViewerDgv.Columns[e.ColumnIndex].Name == "Password")
+            {
+                if (e.Value != null && !string.IsNullOrEmpty(e.Value.ToString()))
+                {
+                    e.Value = new string('*', e.Value.ToString().Length);
+                    e.FormattingApplied = true;
+                }
+            }
+        }
+
         private void tableViewerDgv_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             tableViewerDgv.EndEdit();
+        }
+
+        private void tableViewerDgv_CellEndEdit_UserControl(object sender, DataGridViewCellEventArgs e)
+        {
+            if (tableViewerDgv.Columns[e.ColumnIndex].Name == "EmployeeID")
+            {
+                var selectedEmployeeId = tableViewerDgv.Rows[e.RowIndex].Cells["EmployeeID"].Value;
+                if (selectedEmployeeId != null)
+                {
+                    using (var context = Program.context)
+                    {
+                        var employee = context.Employees
+                            .Include(emp => emp.Position)
+                            .FirstOrDefault(emp => emp.EmployeeID == (int)selectedEmployeeId);
+
+                        if (employee != null)
+                        {
+                            tableViewerDgv.Rows[e.RowIndex].Cells["PositionName"].Value = employee.Position?.PositionName;
+                        }
+                    }
+                }
+            }
         }
 
         private void LoadData()
@@ -536,17 +635,15 @@ namespace KitchenBoss.AppForms
             }
         }
 
-        //Новая функция для загрузки блюд для выбранного заказа
         private void LoadOrderItemsData(int orderID)
         {
             using (var context = Program.context)
             {
                 var orderItems = context.OrderItems
-                                      .Include(oi => oi.Dish) // Загружаем информацию о блюде
+                                      .Include(oi => oi.Dish)
                                       .Where(oi => oi.OrderID == orderID)
                                       .ToList();
 
-                // Получаем список блюд для ComboBoxColumn
                 var dishList = context.Dishes.ToList();
                 var dishColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["DishID"];
                 if (dishColumn != null)
@@ -556,12 +653,62 @@ namespace KitchenBoss.AppForms
 
                 tableViewerDgv.DataSource = new BindingList<OrderItem>(orderItems);
 
-                // Обновляем цену для каждой строки
                 foreach (DataGridViewRow row in tableViewerDgv.Rows)
                 {
                     UpdatePrice(row);
                 }
 
+            }
+        }
+
+        private void LoadUserData(bool onlyManager)
+        {
+            using (var context = Program.context)
+            {
+                var employeesQuery = context.Employees.Include(e => e.Position);
+                if (onlyManager)
+                {
+                    employeesQuery = employeesQuery.Where(e => e.Position.PositionName == "Менеджер");
+                }
+
+                var employees = employeesQuery.ToList()
+                    .Select(e => new
+                    {
+                        EmployeeID = e.EmployeeID,
+                        FullName = $"{e.FirstName} {e.LastName}",
+                        PositionName = e.Position?.PositionName
+                    })
+                    .ToList();
+
+                var usersQuery = context.Users
+                    .Include(u => u.Employee)
+                    .Where(u => u.Employee != null);
+
+                if (onlyManager)
+                {
+                    usersQuery = usersQuery.Where(u => u.Employee.Position.PositionName == "Менеджер");
+                }
+
+                var users = usersQuery.ToList()
+                    .Select(u => new
+                    {
+                        UserID = u.UserID,
+                        EmployeeID = u.EmployeeID,
+                        FullName = u.Employee != null ? $"{u.Employee.FirstName} {u.Employee.LastName}" : "N/A",
+                        Password = "******",
+                        PositionName = u.Employee?.Position?.PositionName ?? "N/A"
+                    })
+                    .ToList();
+
+                var employeeColumn = tableViewerDgv.Columns["EmployeeID"] as DataGridViewComboBoxColumn;
+                if (employeeColumn != null)
+                {
+                    employeeColumn.DataSource = employees;
+                    employeeColumn.DisplayMember = "FullName";
+                    employeeColumn.ValueMember = "EmployeeID";
+                }
+
+                tableViewerDgv.DataSource = new BindingList<dynamic>(users.Cast<dynamic>().ToList());
             }
         }
 
@@ -663,6 +810,12 @@ namespace KitchenBoss.AppForms
                 SaveOrdersData();
             else if (isOrderItemsMode)
                 SaveOrderItemsData();
+            else if (isUserControlMode)
+            {
+                if (!ValidateUserData())
+                    return;
+                SaveUserData();
+            }
             else
                 SaveEmployeesData();
         }
@@ -998,34 +1151,132 @@ namespace KitchenBoss.AppForms
             }
         }
 
+        private void SaveUserData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var userId = Convert.ToInt32(row.Cells["UserID"].Value ?? 0);
+                        var employeeId = Convert.ToInt32(row.Cells["EmployeeID"].Value);
+                        var password = row.Cells["Password"].Value?.ToString();
+
+                        var user = context.Users.FirstOrDefault(u => u.UserID == userId);
+
+                        if (user != null)
+                        {
+                            if (!string.IsNullOrEmpty(password) && password != "******")
+                            {
+                                var newSalt = Guid.NewGuid();
+                                string hashedPassword = HashPassword(password, newSalt.ToString());
+
+                                user.PasswordHash = Convert.FromBase64String(hashedPassword);
+                                user.PasswordSalt = newSalt;
+                            }
+                            user.EmployeeID = employeeId;
+                        }
+                        else
+                        {
+                            var newSalt = Guid.NewGuid();
+                            string hashedPassword = HashPassword(password ?? "defaultpassword", newSalt.ToString());
+
+                            var newUser = new User
+                            {
+                                EmployeeID = employeeId,
+                                PasswordHash = Convert.FromBase64String(hashedPassword),
+                                PasswordSalt = newSalt
+                            };
+                            context.Users.Add(newUser);
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+                    MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private string HashPassword(string password, string salt)
+        {
+            string passwordWithSalt = salt + password;
+            using (SHA512 sha512 = SHA512.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(passwordWithSalt);
+                byte[] hashBytes = sha512.ComputeHash(bytes);
+
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
+
         private bool ValidateData()
         {
+            if (!isUserControlMode)
+            {
+                foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    var fullName = row.Cells["FullName"].Value?.ToString();
+                    if (string.IsNullOrWhiteSpace(fullName) || fullName.Split(' ').Length != 2)
+                    {
+                        MessageBox.Show("В поле ФИО должно быть ровно 2 слова (Имя и Фамилия)", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(row.Cells["PositionID"].Value?.ToString()) ||
+                        string.IsNullOrWhiteSpace(row.Cells["HireDate"].Value?.ToString()) ||
+                        string.IsNullOrWhiteSpace(row.Cells["Salary"].Value?.ToString()))
+                    {
+                        MessageBox.Show("Первые 4 столбца не могут быть пустыми", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(row.Cells["Email"].Value?.ToString()) &&
+                        string.IsNullOrWhiteSpace(row.Cells["PhoneNumber"].Value?.ToString()))
+                    {
+                        MessageBox.Show("Должен быть заполнен хотя бы один контакт (Email или Телефон)", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private bool ValidateUserData()
+        {
+            var usedEmployees = new HashSet<int>();
+
             foreach (DataGridViewRow row in tableViewerDgv.Rows)
             {
                 if (row.IsNewRow) continue;
 
-                var fullName = row.Cells["FullName"].Value?.ToString();
-                if (string.IsNullOrWhiteSpace(fullName) || fullName.Split(' ').Length != 2)
+                var employeeId = Convert.ToInt32(row.Cells["EmployeeID"].Value);
+
+                if (usedEmployees.Contains(employeeId))
                 {
-                    MessageBox.Show("В поле ФИО должно быть ровно 2 слова (Имя и Фамилия)", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Сотрудник уже добавлен.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
-                if (string.IsNullOrWhiteSpace(row.Cells["PositionID"].Value?.ToString()) ||
-                    string.IsNullOrWhiteSpace(row.Cells["HireDate"].Value?.ToString()) ||
-                    string.IsNullOrWhiteSpace(row.Cells["Salary"].Value?.ToString()))
-                {
-                    MessageBox.Show("Первые 4 столбца не могут быть пустыми", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return false;
-                }
+                usedEmployees.Add(employeeId);
 
-                if (string.IsNullOrWhiteSpace(row.Cells["Email"].Value?.ToString()) &&
-                    string.IsNullOrWhiteSpace(row.Cells["PhoneNumber"].Value?.ToString()))
+                if (string.IsNullOrWhiteSpace(row.Cells["Password"].Value?.ToString()))
                 {
-                    MessageBox.Show("Должен быть заполнен хотя бы один контакт (Email или Телефон)", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Пароль не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
             }
+
             return true;
         }
 

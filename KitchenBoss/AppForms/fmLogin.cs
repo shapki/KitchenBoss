@@ -1,6 +1,5 @@
 ﻿using KitchenBoss.Properties;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
@@ -9,10 +8,6 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
-    /// <summary>
-    /// TODO: Подогнать под требования
-    /// TODO: Написать summary-комментарии
-    /// </summary>
     public partial class fmLogin : Form
     {
         private bool _showingPassword = true;
@@ -31,19 +26,17 @@ namespace KitchenBoss.AppForms
         {
             _showingPassword = !_showingPassword;
             passwordTextBox.UseSystemPasswordChar = _showingPassword;
-
-            if (_showingPassword)
-                showPasswordPictureBox.Image = Resources.regular_eye_DISMISS_x20;
-            else
-                showPasswordPictureBox.Image = Resources.regular_eye_x20;
+            showPasswordPictureBox.Image = _showingPassword
+                ? Resources.regular_eye_x20
+                : Resources.regular_eye_DISMISS_x20;
         }
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            string username = usernameTextBox.Text;
+            string loginInput = usernameTextBox.Text.Trim();
             string password = passwordTextBox.Text;
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(loginInput) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Введите логин и пароль.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -51,25 +44,41 @@ namespace KitchenBoss.AppForms
 
             try
             {
-                var user = Program.context.Users.FirstOrDefault(u => u.Username == username);
+                // Ищем сотрудника по телефону или email
+                System.Linq.Expressions.Expression<Func<AppModels.Employee, bool>> predicate = emp => emp.PhoneNumber == loginInput || emp.Email == loginInput;
 
-                if (user == null)
+                var employee = Program.context.Employees.FirstOrDefault(predicate);
+
+                if (employee == null)
                 {
                     MessageBox.Show("Неверный логин или пароль.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                // Ищем пользователя по EmployeeID
+                var user = Program.context.Users.FirstOrDefault(u => u.EmployeeID == employee.EmployeeID);
+
+                if (user == null)
+                {
+                    MessageBox.Show("Пользователь не найден.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Хешируем введённый пароль
                 string salt = user.PasswordSalt.ToString();
                 string hashedPassword = HashPassword(password, salt);
 
                 if (Convert.ToBase64String(user.PasswordHash) == hashedPassword)
                 {
-                    fmMain mainForm = new fmMain(username);
+                    // Открываем главную форму
+                    fmMain mainForm = new fmMain(employee.EmployeeID);
                     mainForm.Show();
                     this.Hide();
                 }
                 else
+                {
                     MessageBox.Show("Неверный логин или пароль.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             catch (Exception ex)
             {

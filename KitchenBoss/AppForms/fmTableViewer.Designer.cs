@@ -38,74 +38,85 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.positionsButton = new System.Windows.Forms.Button();
             this.clientOrderDishesButton = new System.Windows.Forms.Button();
+            this.buttonsPanel = new System.Windows.Forms.Panel();
             this.headerPanel.SuspendLayout();
             this.headerLogoBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableViewerDgv)).BeginInit();
+            this.buttonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // headerPanel
             // 
-            this.headerPanel.BackColor = System.Drawing.Color.IndianRed;
+            this.headerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.headerPanel.Controls.Add(this.headerTitleLabel);
             this.headerPanel.Controls.Add(this.headerSubtitleLabel);
             this.headerPanel.Controls.Add(this.headerLogoBackPanel);
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(0, 0);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(481, 60);
+            this.headerPanel.Size = new System.Drawing.Size(500, 70);
             this.headerPanel.TabIndex = 13;
             // 
             // headerTitleLabel
             // 
-            this.headerTitleLabel.AutoSize = true;
             this.headerTitleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.headerTitleLabel.Font = new System.Drawing.Font("Franklin Gothic Heavy", 20F);
-            this.headerTitleLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.headerTitleLabel.Location = new System.Drawing.Point(66, 4);
+            this.headerTitleLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 18F, System.Drawing.FontStyle.Bold);
+            this.headerTitleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.headerTitleLabel.Location = new System.Drawing.Point(80, 10);
             this.headerTitleLabel.Name = "headerTitleLabel";
-            this.headerTitleLabel.Size = new System.Drawing.Size(200, 34);
+            this.headerTitleLabel.Size = new System.Drawing.Size(177, 32);
             this.headerTitleLabel.TabIndex = 4;
-            this.headerTitleLabel.Text = "KITCHEN BOSS\r\n";
+            this.headerTitleLabel.Text = "KITCHEN BOSS";
             // 
             // headerSubtitleLabel
             // 
-            this.headerSubtitleLabel.AutoSize = true;
             this.headerSubtitleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.headerSubtitleLabel.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 15F);
-            this.headerSubtitleLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.headerSubtitleLabel.Location = new System.Drawing.Point(66, 35);
+            this.headerSubtitleLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.headerSubtitleLabel.ForeColor = System.Drawing.Color.Silver;
+            this.headerSubtitleLabel.Location = new System.Drawing.Point(82, 42);
             this.headerSubtitleLabel.Name = "headerSubtitleLabel";
-            this.headerSubtitleLabel.Size = new System.Drawing.Size(105, 25);
+            this.headerSubtitleLabel.Size = new System.Drawing.Size(308, 19);
             this.headerSubtitleLabel.TabIndex = 3;
             this.headerSubtitleLabel.Text = "Сотрудники";
             // 
             // headerLogoBackPanel
             // 
-            this.headerLogoBackPanel.BackColor = System.Drawing.Color.Orange;
+            this.headerLogoBackPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
             this.headerLogoBackPanel.Controls.Add(this.headerLogoPictureBox);
+            this.headerLogoBackPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.headerLogoBackPanel.Location = new System.Drawing.Point(0, 0);
             this.headerLogoBackPanel.Name = "headerLogoBackPanel";
-            this.headerLogoBackPanel.Size = new System.Drawing.Size(60, 60);
+            this.headerLogoBackPanel.Size = new System.Drawing.Size(70, 70);
             this.headerLogoBackPanel.TabIndex = 1;
             // 
             // headerLogoPictureBox
             // 
+            this.headerLogoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.headerLogoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("headerLogoPictureBox.Image")));
             this.headerLogoPictureBox.Location = new System.Drawing.Point(0, 0);
             this.headerLogoPictureBox.Name = "headerLogoPictureBox";
-            this.headerLogoPictureBox.Size = new System.Drawing.Size(60, 60);
-            this.headerLogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.headerLogoPictureBox.Padding = new System.Windows.Forms.Padding(10);
+            this.headerLogoPictureBox.Size = new System.Drawing.Size(70, 70);
+            this.headerLogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.headerLogoPictureBox.TabIndex = 0;
             this.headerLogoPictureBox.TabStop = false;
             // 
             // tableViewerDgv
             // 
+            this.tableViewerDgv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableViewerDgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.tableViewerDgv.BackgroundColor = System.Drawing.Color.White;
+            this.tableViewerDgv.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableViewerDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tableViewerDgv.Location = new System.Drawing.Point(12, 66);
+            this.tableViewerDgv.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.tableViewerDgv.Location = new System.Drawing.Point(10, 80);
             this.tableViewerDgv.Name = "tableViewerDgv";
-            this.tableViewerDgv.Size = new System.Drawing.Size(457, 280);
+            this.tableViewerDgv.RowHeadersVisible = false;
+            this.tableViewerDgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.tableViewerDgv.Size = new System.Drawing.Size(480, 300);
             this.tableViewerDgv.TabIndex = 18;
             this.tableViewerDgv.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.tableViewerDgv_CellValueChanged);
             this.tableViewerDgv.CurrentCellDirtyStateChanged += new System.EventHandler(this.tableViewerDgv_CurrentCellDirtyStateChanged);
@@ -116,19 +127,20 @@
             // 
             // saveButton
             // 
-            this.saveButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.saveButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveButton.BackColor = System.Drawing.Color.White;
             this.saveButton.Enabled = false;
-            this.saveButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.saveButton.FlatAppearance.BorderSize = 2;
-            this.saveButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.saveButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.saveButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+            this.saveButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.saveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.saveButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
+            this.saveButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.saveButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.saveButton.Image = global::KitchenBoss.Properties.Resources.regular_save_x20;
             this.saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.saveButton.Location = new System.Drawing.Point(370, 352);
+            this.saveButton.Location = new System.Drawing.Point(380, 5);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(99, 28);
+            this.saveButton.Size = new System.Drawing.Size(100, 30);
             this.saveButton.TabIndex = 17;
             this.saveButton.Text = "Сохранить";
             this.saveButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -137,18 +149,19 @@
             // 
             // positionsButton
             // 
-            this.positionsButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.positionsButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.positionsButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.positionsButton.FlatAppearance.BorderSize = 2;
-            this.positionsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.positionsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.positionsButton.BackColor = System.Drawing.Color.White;
+            this.positionsButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.positionsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+            this.positionsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.positionsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.positionsButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
+            this.positionsButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.positionsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.positionsButton.Image = global::KitchenBoss.Properties.Resources.regular_job_x20;
             this.positionsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.positionsButton.Location = new System.Drawing.Point(12, 352);
+            this.positionsButton.Location = new System.Drawing.Point(10, 5);
             this.positionsButton.Name = "positionsButton";
-            this.positionsButton.Size = new System.Drawing.Size(103, 28);
+            this.positionsButton.Size = new System.Drawing.Size(110, 30);
             this.positionsButton.TabIndex = 21;
             this.positionsButton.Text = "Должности";
             this.positionsButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -157,18 +170,19 @@
             // 
             // clientOrderDishesButton
             // 
-            this.clientOrderDishesButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.clientOrderDishesButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.clientOrderDishesButton.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.clientOrderDishesButton.FlatAppearance.BorderSize = 2;
-            this.clientOrderDishesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.clientOrderDishesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.clientOrderDishesButton.BackColor = System.Drawing.Color.White;
+            this.clientOrderDishesButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.clientOrderDishesButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+            this.clientOrderDishesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.clientOrderDishesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.clientOrderDishesButton.Font = new System.Drawing.Font("Franklin Gothic Demi Cond", 10F);
+            this.clientOrderDishesButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.clientOrderDishesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.clientOrderDishesButton.Image = global::KitchenBoss.Properties.Resources.regular_orders_x20;
             this.clientOrderDishesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.clientOrderDishesButton.Location = new System.Drawing.Point(121, 352);
+            this.clientOrderDishesButton.Location = new System.Drawing.Point(130, 5);
             this.clientOrderDishesButton.Name = "clientOrderDishesButton";
-            this.clientOrderDishesButton.Size = new System.Drawing.Size(108, 28);
+            this.clientOrderDishesButton.Size = new System.Drawing.Size(110, 30);
             this.clientOrderDishesButton.TabIndex = 23;
             this.clientOrderDishesButton.Text = "Чек клиента";
             this.clientOrderDishesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -176,27 +190,41 @@
             this.clientOrderDishesButton.Visible = false;
             this.clientOrderDishesButton.Click += new System.EventHandler(this.clientOrderDishesButton_Click);
             // 
+            // buttonsPanel
+            // 
+            this.buttonsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.buttonsPanel.Controls.Add(this.positionsButton);
+            this.buttonsPanel.Controls.Add(this.clientOrderDishesButton);
+            this.buttonsPanel.Controls.Add(this.saveButton);
+            this.buttonsPanel.Location = new System.Drawing.Point(0, 390);
+            this.buttonsPanel.Name = "buttonsPanel";
+            this.buttonsPanel.Size = new System.Drawing.Size(500, 40);
+            this.buttonsPanel.TabIndex = 24;
+            // 
             // fmTableViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(481, 392);
-            this.Controls.Add(this.clientOrderDishesButton);
-            this.Controls.Add(this.positionsButton);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(500, 430);
+            this.Controls.Add(this.buttonsPanel);
             this.Controls.Add(this.tableViewerDgv);
-            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.headerPanel);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(516, 469);
             this.Name = "fmTableViewer";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KitchenBoss - Сотрудники";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmTableViewer_FormClosing);
             this.headerPanel.ResumeLayout(false);
-            this.headerPanel.PerformLayout();
             this.headerLogoBackPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableViewerDgv)).EndInit();
+            this.buttonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -204,13 +232,14 @@
         #endregion
 
         private System.Windows.Forms.Panel headerPanel;
-        private System.Windows.Forms.Label headerTitleLabel;
-        private System.Windows.Forms.Label headerSubtitleLabel;
         private System.Windows.Forms.Panel headerLogoBackPanel;
         private System.Windows.Forms.PictureBox headerLogoPictureBox;
         private System.Windows.Forms.DataGridView tableViewerDgv;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button positionsButton;
         private System.Windows.Forms.Button clientOrderDishesButton;
+        private System.Windows.Forms.Panel buttonsPanel;
+        private System.Windows.Forms.Label headerTitleLabel;
+        private System.Windows.Forms.Label headerSubtitleLabel;
     }
 }

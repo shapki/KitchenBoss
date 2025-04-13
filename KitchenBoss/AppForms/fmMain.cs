@@ -4,77 +4,67 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
-    /// <summary>
-    /// TODO: Подогнать под требования
-    /// TODO: Написать summary-комментарии
-    /// TODO: Сделать форму для изменения столиков
-    /// </summary>
     public partial class fmMain : Form
     {
-        public fmMain(string username)
+        private int _employeeID; // Для хранения ID сотрудника
+
+        public fmMain(int employeeID)
         {
             InitializeComponent();
-            string employeeFullNameAndPosition = GetEmployeeFullNameAndPosition(username);
+            _employeeID = employeeID; // Сохраняем EmployeeID
+
+            // Получаем ФИО и должность сотрудника
+            string employeeFullNameAndPosition = GetEmployeeFullNameAndPosition(_employeeID);
             loginAndPositionLabel.Text = employeeFullNameAndPosition;
 
-            string position = GetUserPosition(username);
-
+            // Определяем права доступа на основе должности
+            string position = GetUserPosition(_employeeID);
             userControlButton.Enabled = (position == "Менеджер");
         }
 
-        private string GetEmployeeFullNameAndPosition(string username)
+        private string GetEmployeeFullNameAndPosition(int employeeID)
         {
             try
             {
                 using (var context = Program.context)
                 {
-                    var user = context.Users.FirstOrDefault(u => u.Username == username);
-                    var result = $"ФИО: Пользователь не найден\nДоступ: Должность не найдена";
-
-                    if (user != null)
+                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeID);
+                    if (employee == null)
                     {
-                        var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == user.EmployeeID);
-
-                        if (employee != null)
-                        {
-                            string fullName = $"{employee.FirstName} {employee.LastName}";
-
-                            if (user.Position != null)
-                                result = $"ФИО: {fullName}\nДоступ: {user.Position.PositionName}";
-                            else
-                                result = $"ФИО: {fullName}\nДоступ: Должность не найдена";
-                        }
-                        else
-                            result = $"ФИО: Сотрудник не найден\nДоступ: Должность не найдена";
+                        return "Сотрудник не найден\nДоступ: Не определён";
                     }
 
-                    return result;
+                    var position = context.Positions.FirstOrDefault(p => p.PositionID == employee.PositionID);
+                    string fullName = $"{employee.FirstName} {employee.LastName}";
+                    string positionName = position?.PositionName ?? "Не определена";
+
+                    return $"ФИО: {fullName}\nДоступ: {positionName}";
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при получении данных сотрудника: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return "Ошибка";
             }
         }
 
-        private string GetUserPosition(string username)
+        private string GetUserPosition(int employeeID)
         {
             try
             {
                 using (var context = Program.context)
                 {
-                    var user = context.Users.FirstOrDefault(u => u.Username == username);
-
-                    if (user != null && user.Position != null)
+                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeID);
+                    if (employee == null)
                     {
-                        return user.Position.PositionName;
+                        return string.Empty;
                     }
 
-                    return string.Empty;
+                    var position = context.Positions.FirstOrDefault(p => p.PositionID == employee.PositionID);
+                    return position?.PositionName ?? string.Empty;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при получении должности пользователя: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return string.Empty;
@@ -85,16 +75,17 @@ namespace KitchenBoss.AppForms
         {
             var formsToClose = new[]
             {
-                typeof(fmUserControl),
                 typeof(fmDishes),
                 typeof(fmTableViewer)
             };
 
-            Form[] openForms = Application.OpenForms.Cast<Form>().ToArray();
-
-            foreach (Form openForm in openForms)
+            foreach (Form openForm in Application.OpenForms.Cast<Form>().ToArray())
+            {
                 if (formsToClose.Contains(openForm.GetType()))
+                {
                     openForm.Close();
+                }
+            }
         }
 
         private void LogoutAndReturnToLogin()
@@ -104,7 +95,6 @@ namespace KitchenBoss.AppForms
             {
                 CloseSpecificForms();
                 this.Hide();
-
                 fmLogin loginForm = new fmLogin();
                 loginForm.Show();
             }
@@ -116,12 +106,13 @@ namespace KitchenBoss.AppForms
             if (result == DialogResult.Yes)
             {
                 CloseSpecificForms();
-
                 fmLogin loginForm = new fmLogin();
                 loginForm.Show();
             }
             else
+            {
                 e.Cancel = true;
+            }
         }
 
         private void fmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -134,28 +125,30 @@ namespace KitchenBoss.AppForms
             LogoutAndReturnToLogin();
         }
 
-        private void employeesButton_Click(object sender, System.EventArgs e)
+        private void employeesButton_Click(object sender, EventArgs e)
         {
             fmTableViewer employeesForm = new fmTableViewer();
             employeesForm.Show();
         }
 
-        private void userControlButton_Click(object sender, System.EventArgs e)
+        private void userControlButton_Click(object sender, EventArgs e)
         {
-            fmUserControl userControlForm = new fmUserControl();
+            //fmUserControl userControlForm = new fmUserControl();
+            //userControlForm.Show();
+            fmTableViewer userControlForm = new fmTableViewer(false, false, false, null, null, false, true);
             userControlForm.Show();
         }
 
-        private void dishesButton_Click(object sender, System.EventArgs e)
+        private void dishesButton_Click(object sender, EventArgs e)
         {
             fmDishes dishesForm = new fmDishes();
             dishesForm.Show();
         }
 
-        private void clientsButton_Click(object sender, System.EventArgs e)
+        private void clientsButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer employeesForm = new fmTableViewer(false, true);
-            employeesForm.Show();
+            fmTableViewer clientsForm = new fmTableViewer(false, true);
+            clientsForm.Show();
         }
 
         private void ordersButton_Click(object sender, EventArgs e)
@@ -166,7 +159,7 @@ namespace KitchenBoss.AppForms
 
         private void tablesButton_Click(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

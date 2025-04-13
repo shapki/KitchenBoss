@@ -1,7 +1,4 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Linq;
 
 namespace KitchenBoss.AppModels
 {
@@ -59,6 +56,11 @@ namespace KitchenBoss.AppModels
                 .WithRequired(e => e.Employee)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.Users)
+                .WithRequired(e => e.Employee)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Ingredient>()
                 .HasMany(e => e.DishIngredients)
                 .WithRequired(e => e.Ingredient)
@@ -84,11 +86,6 @@ namespace KitchenBoss.AppModels
 
             modelBuilder.Entity<Position>()
                 .HasMany(e => e.Employees)
-                .WithRequired(e => e.Position)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Position>()
-                .HasMany(e => e.Users)
                 .WithRequired(e => e.Position)
                 .WillCascadeOnDelete(false);
         }

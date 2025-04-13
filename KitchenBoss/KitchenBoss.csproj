@@ -82,12 +82,6 @@
     <Compile Include="AppForms\fmMain.Designer.cs">
       <DependentUpon>fmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppForms\fmUserControl.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AppForms\fmUserControl.Designer.cs">
-      <DependentUpon>fmUserControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="AppModels\Customer.cs" />
     <Compile Include="AppModels\Dish.cs" />
     <Compile Include="AppModels\DishCategory.cs" />
@@ -111,9 +105,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmLogin.resx">
       <DependentUpon>fmLogin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AppForms\fmUserControl.resx">
-      <DependentUpon>fmUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmMain.resx">
       <DependentUpon>fmMain.cs</DependentUpon>

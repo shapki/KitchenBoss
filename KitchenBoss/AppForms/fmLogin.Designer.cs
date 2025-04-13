@@ -65,7 +65,6 @@
             // 
             // headerTitleLabel
             // 
-            this.headerTitleLabel.AutoSize = true;
             this.headerTitleLabel.BackColor = System.Drawing.Color.Transparent;
             this.headerTitleLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 18F, System.Drawing.FontStyle.Bold);
             this.headerTitleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
@@ -77,7 +76,6 @@
             // 
             // headerSubtitleLabel
             // 
-            this.headerSubtitleLabel.AutoSize = true;
             this.headerSubtitleLabel.BackColor = System.Drawing.Color.Transparent;
             this.headerSubtitleLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.headerSubtitleLabel.ForeColor = System.Drawing.Color.Silver;
@@ -283,7 +281,6 @@
             this.Text = "KitchenBoss - Авторизация";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmLogin_FormClosing);
             this.headerPanel.ResumeLayout(false);
-            this.headerPanel.PerformLayout();
             this.headerLogoBackPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.showPasswordPictureBox)).EndInit();

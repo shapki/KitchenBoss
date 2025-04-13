@@ -2,9 +2,7 @@ namespace KitchenBoss.AppModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("Order")]
     public partial class Order
@@ -34,6 +32,8 @@ namespace KitchenBoss.AppModels
         public virtual Employee Employee { get; set; }
 
         public virtual OrderStatu OrderStatu { get; set; }
+
+        public virtual Table Table { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }

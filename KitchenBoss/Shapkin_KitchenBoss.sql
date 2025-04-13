@@ -264,30 +264,6 @@ INSERT INTO OrderItem (OrderID, DishID, Quantity, Price) VALUES
 GO
 
 
-CREATE TABLE Users (
-    UserID INT PRIMARY KEY IDENTITY(1,1),
-    Username NVARCHAR(50) NOT NULL UNIQUE,
-    PasswordHash VARBINARY(64) NOT NULL, -- Хеш пароля
-    PasswordSalt UNIQUEIDENTIFIER NOT NULL, -- Соль для хеширования
-    PositionID INT NOT NULL, -- ID должности (для определения прав доступа)
-    EmployeeID INT NULL, --ID сотрудника (если привязан к сотруднику)
-    CONSTRAINT FK_Users_Position FOREIGN KEY (PositionID) REFERENCES Position(PositionID),
-    CONSTRAINT FK_Users_Employee FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
-);
-GO
-
--- Функция для хеширования паролей
-CREATE FUNCTION HashPassword(@Password NVARCHAR(MAX), @Salt UNIQUEIDENTIFIER)
-RETURNS VARBINARY(64)
-AS
-BEGIN
-    DECLARE @PasswordWithSalt NVARCHAR(MAX) = CAST(@Salt AS NVARCHAR(36)) + @Password;
-    DECLARE @HashedPassword VARBINARY(64) = HASHBYTES('SHA2_512', @PasswordWithSalt);
-    RETURN @HashedPassword;
-END;
-GO
-
-
 SELECT * FROM Customer;
 --SELECT * FROM Dish;
 SELECT
@@ -343,5 +319,19 @@ SELECT * FROM [Table];
 
 USE Shapkin_KitchenBoss;
 GO
-SELECT * FROM Users;
+
+-- ВЫПОЛНИТЬ В БД КОЛЛЕДЖА
 TRUNCATE TABLE Users;
+DROP TABLE Users;
+DROP FUNCTION HashPassword;
+
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    EmployeeID INT NOT NULL UNIQUE,
+    PasswordHash VARBINARY(64) NOT NULL, -- Хеш пароля
+    PasswordSalt UNIQUEIDENTIFIER NOT NULL, -- Соль для хеширования
+    CONSTRAINT FK_Users_Employee FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
+);
+GO
+
+SELECT * FROM Users;

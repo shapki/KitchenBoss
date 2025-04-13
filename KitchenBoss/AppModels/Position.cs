@@ -1,10 +1,8 @@
 namespace KitchenBoss.AppModels
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("Position")]
     public partial class Position
@@ -13,7 +11,6 @@ namespace KitchenBoss.AppModels
         public Position()
         {
             Employees = new HashSet<Employee>();
-            Users = new HashSet<User>();
         }
 
         public int PositionID { get; set; }
@@ -27,8 +24,5 @@ namespace KitchenBoss.AppModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employees { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
     }
 }
