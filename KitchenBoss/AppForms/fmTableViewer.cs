@@ -19,7 +19,7 @@ namespace KitchenBoss.AppForms
     /// TODO: Сделать таблицу Клиентов редактируемой
     /// TODO: Сделать таблицу Управления Пользователями редактируемой (редачится только если прилетел onlyManager)
     /// TODO: Исправить вывод должности в таблице Управления Пользователями (должна выводиться после выбора сотрудника и при подгрузке данных)
-    /// </summary> 
+    /// </summary>
     public partial class fmTableViewer : Form
     {
         private bool isChanged = false;
@@ -406,6 +406,15 @@ namespace KitchenBoss.AppForms
             tableViewerDgv.AllowUserToAddRows = true;
             tableViewerDgv.Columns.Clear();
 
+            var userIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "UserID",
+                HeaderText = "UserID",
+                DataPropertyName = "UserID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(userIdColumn);
+
             var fullNameColumn = new DataGridViewComboBoxColumn
             {
                 Name = "EmployeeID",
@@ -435,9 +444,15 @@ namespace KitchenBoss.AppForms
 
             using (var context = Program.context)
             {
-                var employees = context.Employees
-                    .Include(e => e.Position)
-                    .ToList()
+                var employeesQuery = context.Employees
+                    .Include(e => e.Position);
+
+                if (onlyManager)
+                {
+                    employeesQuery = employeesQuery.Where(e => e.Position.PositionName == "Менеджер");
+                }
+
+                var employees = employeesQuery.ToList()
                     .Select(e => new
                     {
                         EmployeeID = e.EmployeeID,
@@ -445,24 +460,11 @@ namespace KitchenBoss.AppForms
                         PositionName = e.Position?.PositionName
                     })
                     .ToList();
+
                 fullNameColumn.DataSource = employees;
-                fullNameColumn.DisplayMember = "FullName";
-                fullNameColumn.ValueMember = "EmployeeID";
             }
 
             tableViewerDgv.AllowUserToDeleteRows = true;
-        }
-
-        private void TableViewerDgv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (tableViewerDgv.Columns[e.ColumnIndex].Name == "Password")
-            {
-                if (e.Value != null && !string.IsNullOrEmpty(e.Value.ToString()))
-                {
-                    e.Value = new string('*', e.Value.ToString().Length);
-                    e.FormattingApplied = true;
-                }
-            }
         }
 
         private void tableViewerDgv_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -639,6 +641,14 @@ namespace KitchenBoss.AppForms
         {
             using (var context = Program.context)
             {
+                var order = context.Orders
+                                 .Include(o => o.OrderStatu)
+                                 .FirstOrDefault(o => o.OrderID == orderID);
+
+                // Проверяем статус заказа
+                bool isReadOnly = order?.OrderStatu?.StatusName == "Отменен" ||
+                                 order?.OrderStatu?.StatusName == "Закрыт";
+
                 var orderItems = context.OrderItems
                                       .Include(oi => oi.Dish)
                                       .Where(oi => oi.OrderID == orderID)
@@ -653,11 +663,32 @@ namespace KitchenBoss.AppForms
 
                 tableViewerDgv.DataSource = new BindingList<OrderItem>(orderItems);
 
+                // Устанавливаем режим только для чтения, если заказ отменен или закрыт
+                tableViewerDgv.ReadOnly = isReadOnly;
+                tableViewerDgv.AllowUserToAddRows = !isReadOnly;
+                tableViewerDgv.AllowUserToDeleteRows = !isReadOnly;
+
                 foreach (DataGridViewRow row in tableViewerDgv.Rows)
                 {
                     UpdatePrice(row);
+
+                    // Устанавливаем ячейки в режим только для чтения
+                    if (isReadOnly)
+                    {
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            cell.ReadOnly = true;
+                        }
+                    }
                 }
 
+                if (isReadOnly)
+                {
+                    MessageBox.Show("Этот чек нельзя редактировать, так как заказ имеет статус 'Отменен' или 'Закрыт'",
+                                   "Информация",
+                                   MessageBoxButtons.OK,
+                                   MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -681,8 +712,7 @@ namespace KitchenBoss.AppForms
                     .ToList();
 
                 var usersQuery = context.Users
-                    .Include(u => u.Employee)
-                    .Where(u => u.Employee != null);
+                    .Include(u => u.Employee);
 
                 if (onlyManager)
                 {
@@ -704,8 +734,6 @@ namespace KitchenBoss.AppForms
                 if (employeeColumn != null)
                 {
                     employeeColumn.DataSource = employees;
-                    employeeColumn.DisplayMember = "FullName";
-                    employeeColumn.ValueMember = "EmployeeID";
                 }
 
                 tableViewerDgv.DataSource = new BindingList<dynamic>(users.Cast<dynamic>().ToList());
@@ -1161,7 +1189,7 @@ namespace KitchenBoss.AppForms
                     {
                         if (row.IsNewRow) continue;
 
-                        var userId = Convert.ToInt32(row.Cells["UserID"].Value ?? 0);
+                        var userId = row.Cells["UserID"].Value == null ? 0 : Convert.ToInt32(row.Cells["UserID"].Value);
                         var employeeId = Convert.ToInt32(row.Cells["EmployeeID"].Value);
                         var password = row.Cells["Password"].Value?.ToString();
 
