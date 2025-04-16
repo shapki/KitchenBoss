@@ -19,7 +19,7 @@ namespace KitchenBoss.AppForms
     /// TODO: Сделать таблицу Клиентов редактируемой
     /// TODO: Сделать таблицу Управления Пользователями редактируемой (редачится только если прилетел onlyManager)
     /// TODO: Исправить вывод должности в таблице Управления Пользователями (должна выводиться после выбора сотрудника и при подгрузке данных)
-    /// </summary>
+    /// </summary> 
     public partial class fmTableViewer : Form
     {
         private bool isChanged = false;
