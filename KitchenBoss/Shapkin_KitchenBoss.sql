@@ -141,7 +141,7 @@ INSERT INTO OrderStatus (StatusName) VALUES
 (N'Готовится'),
 (N'Готов'),
 (N'Подается'),
-(N'Оплачен'),
+(N'Закрыт'),
 (N'Отменен');
 
 INSERT INTO DishCategory (CategoryName) VALUES
