@@ -58,11 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppForms\fmDishes.cs">
+    <Compile Include="AppForms\fmPasswordRecovery.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AppForms\fmDishes.Designer.cs">
-      <DependentUpon>fmDishes.cs</DependentUpon>
+    <Compile Include="AppForms\fmPasswordRecovery.Designer.cs">
+      <DependentUpon>fmPasswordRecovery.cs</DependentUpon>
     </Compile>
     <Compile Include="AppForms\fmTableViewer.cs">
       <SubType>Form</SubType>
@@ -97,8 +97,8 @@
     <Compile Include="AppModels\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AppForms\fmDishes.resx">
-      <DependentUpon>fmDishes.cs</DependentUpon>
+    <EmbeddedResource Include="AppForms\fmPasswordRecovery.resx">
+      <DependentUpon>fmPasswordRecovery.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AppForms\fmTableViewer.resx">
       <DependentUpon>fmTableViewer.cs</DependentUpon>

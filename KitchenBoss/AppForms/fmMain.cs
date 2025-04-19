@@ -75,7 +75,6 @@ namespace KitchenBoss.AppForms
         {
             var formsToClose = new[]
             {
-                typeof(fmDishes),
                 typeof(fmTableViewer)
             };
 
@@ -133,15 +132,13 @@ namespace KitchenBoss.AppForms
 
         private void userControlButton_Click(object sender, EventArgs e)
         {
-            //fmUserControl userControlForm = new fmUserControl();
-            //userControlForm.Show();
             fmTableViewer userControlForm = new fmTableViewer(false, false, false, null, null, false, true);
             userControlForm.Show();
         }
 
         private void dishesButton_Click(object sender, EventArgs e)
         {
-            fmDishes dishesForm = new fmDishes();
+            fmTableViewer dishesForm = new fmTableViewer(false, false, false, null, null, false, false, false, true);
             dishesForm.Show();
         }
 
@@ -159,7 +156,8 @@ namespace KitchenBoss.AppForms
 
         private void tablesButton_Click(object sender, EventArgs e)
         {
-            
+            fmTableViewer tableForm = new fmTableViewer(false, false, false, null, null, false, false, false, false, false, false, true);
+            tableForm.Show();
         }
     }
 }

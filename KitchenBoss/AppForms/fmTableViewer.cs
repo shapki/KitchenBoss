@@ -15,7 +15,6 @@ namespace KitchenBoss.AppForms
     /// <summary>
     /// TODO: Подогнать под требования
     /// TODO: Написать summary-комментарии
-    /// TODO: Сделать таблицу Клиентов редактируемой
     /// </summary>
     public partial class fmTableViewer : Form
     {
@@ -28,6 +27,10 @@ namespace KitchenBoss.AppForms
         private int? customerIdForOrders = null;
         private int? selectedOrderID = null;
         private bool isUserControlMode = false;
+        private bool isDishesMode = false;
+        private bool isDishCategoriesMode = false;
+        private bool isIngredientsMode = false;
+        private bool isTablesMode = false;
 
         public fmTableViewer()
         {
@@ -36,7 +39,11 @@ namespace KitchenBoss.AppForms
             LoadData();
         }
 
-        public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false, int? customerId = null, int? orderId = null, bool orderItemsMode = false, bool userControlMode = false, bool userControlOnlyManager = false)
+        public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false,
+                            int? customerId = null, int? orderId = null, bool orderItemsMode = false,
+                            bool userControlMode = false, bool userControlOnlyManager = false,
+                            bool dishesMode = false, bool dishCategoriesMode = false, bool ingredientsMode = false,
+                            bool tablesMode = false)
         {
             InitializeComponent();
 
@@ -47,6 +54,10 @@ namespace KitchenBoss.AppForms
             customerIdForOrders = customerId;
             selectedOrderID = orderId;
             isUserControlMode = userControlMode;
+            isDishesMode = dishesMode;
+            isDishCategoriesMode = dishCategoriesMode;
+            isIngredientsMode = ingredientsMode;
+            isTablesMode = tablesMode;
 
             if (isPositionsMode)
             {
@@ -111,6 +122,52 @@ namespace KitchenBoss.AppForms
                 SetupUserControlDataGridView(false);
                 LoadUserData(false);
                 tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_UserControl;
+            }
+            else if (isDishesMode)
+            {
+                Text = "KitchenBoss - Блюда";
+                headerSubtitleLabel.Text = "Блюда";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                dishesCategoriesButton.Visible = true;
+                dishesCategoriesButton.Location = new Point(10, 5);
+                dishesIngredientsButton.Visible = true;
+                dishesIngredientsButton.Location = new Point(145, 5);
+                SetupDishesDataGridView();
+                LoadDishesData();
+            }
+            else if (isDishCategoriesMode)
+            {
+                Text = "KitchenBoss - Категории блюд";
+                headerSubtitleLabel.Text = "Категории блюд";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                dishesCategoriesButton.Visible = false;
+                dishesIngredientsButton.Visible = false;
+                SetupDishCategoriesDataGridView();
+                LoadDishCategoriesData();
+            }
+            else if (isIngredientsMode)
+            {
+                Text = "KitchenBoss - Ингредиенты";
+                headerSubtitleLabel.Text = "Ингредиенты";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                dishesCategoriesButton.Visible = false;
+                dishesIngredientsButton.Visible = false;
+                SetupIngredientsDataGridView();
+                LoadIngredientsData();
+            }
+            else if (isTablesMode)
+            {
+                Text = "KitchenBoss - Столики";
+                headerSubtitleLabel.Text = "Столики";
+                positionsButton.Visible = false;
+                clientOrderDishesButton.Visible = false;
+                dishesCategoriesButton.Visible = false;
+                dishesIngredientsButton.Visible = false;
+                SetupTablesDataGridView();
+                LoadTablesData();
             }
             else
             {
@@ -193,6 +250,8 @@ namespace KitchenBoss.AppForms
         {
             tableViewerDgv.AutoGenerateColumns = false;
             tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.AllowUserToDeleteRows = true;
+            tableViewerDgv.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             tableViewerDgv.Columns.Clear();
 
             var customerIdColumn = new DataGridViewTextBoxColumn
@@ -200,17 +259,26 @@ namespace KitchenBoss.AppForms
                 Name = "CustomerID",
                 HeaderText = "ID",
                 DataPropertyName = "CustomerID",
-                Visible = false
+                Visible = false,
+                ReadOnly = true
             };
             tableViewerDgv.Columns.Add(customerIdColumn);
 
-            var fullNameColumn = new DataGridViewTextBoxColumn
+            var firstNameColumn = new DataGridViewTextBoxColumn
             {
-                Name = "FullName",
-                HeaderText = "ФИО",
-                DataPropertyName = "FullName"
+                Name = "FirstName",
+                HeaderText = "Имя",
+                DataPropertyName = "FirstName"
             };
-            tableViewerDgv.Columns.Add(fullNameColumn);
+            tableViewerDgv.Columns.Add(firstNameColumn);
+
+            var lastNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "LastName",
+                HeaderText = "Фамилия",
+                DataPropertyName = "LastName"
+            };
+            tableViewerDgv.Columns.Add(lastNameColumn);
 
             var phoneColumn = new DataGridViewTextBoxColumn
             {
@@ -228,7 +296,11 @@ namespace KitchenBoss.AppForms
             };
             tableViewerDgv.Columns.Add(emailColumn);
 
-            tableViewerDgv.AllowUserToDeleteRows = true;
+            tableViewerDgv.DefaultValuesNeeded += (sender, e) =>
+            {
+                e.Row.Cells["FirstName"].Value = "";
+                e.Row.Cells["LastName"].Value = "";
+            };
         }
 
         private void SetupPositionsDataGridView()
@@ -464,6 +536,156 @@ namespace KitchenBoss.AppForms
             tableViewerDgv.AllowUserToDeleteRows = true;
         }
 
+        private void SetupDishesDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var dishIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "DishID",
+                HeaderText = "ID",
+                DataPropertyName = "DishID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(dishIdColumn);
+
+            var dishNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "DishName",
+                HeaderText = "Название блюда",
+                DataPropertyName = "DishName"
+            };
+            tableViewerDgv.Columns.Add(dishNameColumn);
+
+            var categoryColumn = new DataGridViewComboBoxColumn
+            {
+                Name = "CategoryID",
+                HeaderText = "Категория",
+                DataPropertyName = "CategoryID",
+                ValueMember = "CategoryID",
+                DisplayMember = "CategoryName",
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing,
+                FlatStyle = FlatStyle.Flat
+            };
+            tableViewerDgv.Columns.Add(categoryColumn);
+
+            var priceColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Price",
+                HeaderText = "Цена",
+                DataPropertyName = "Price"
+            };
+            priceColumn.DefaultCellStyle.Format = "N2";
+            priceColumn.DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("ru-RU");
+            tableViewerDgv.Columns.Add(priceColumn);
+
+            var descriptionColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Description",
+                HeaderText = "Описание",
+                DataPropertyName = "Description"
+            };
+            tableViewerDgv.Columns.Add(descriptionColumn);
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void SetupDishCategoriesDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var categoryIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "CategoryID",
+                HeaderText = "ID",
+                DataPropertyName = "CategoryID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(categoryIdColumn);
+
+            var categoryNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "CategoryName",
+                HeaderText = "Название категории",
+                DataPropertyName = "CategoryName"
+            };
+            tableViewerDgv.Columns.Add(categoryNameColumn);
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void SetupIngredientsDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var ingredientIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "IngredientID",
+                HeaderText = "ID",
+                DataPropertyName = "IngredientID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(ingredientIdColumn);
+
+            var ingredientNameColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "IngredientName",
+                HeaderText = "Название ингредиента",
+                DataPropertyName = "IngredientName"
+            };
+            tableViewerDgv.Columns.Add(ingredientNameColumn);
+
+            var unitColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Unit",
+                HeaderText = "Единица измерения",
+                DataPropertyName = "Unit"
+            };
+            tableViewerDgv.Columns.Add(unitColumn);
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
+        private void SetupTablesDataGridView()
+        {
+            tableViewerDgv.AutoGenerateColumns = false;
+            tableViewerDgv.AllowUserToAddRows = true;
+            tableViewerDgv.Columns.Clear();
+
+            var tableIdColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "TableID",
+                HeaderText = "ID",
+                DataPropertyName = "TableID",
+                Visible = false
+            };
+            tableViewerDgv.Columns.Add(tableIdColumn);
+
+            var tableNumberColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "TableNumber",
+                HeaderText = "Номер столика",
+                DataPropertyName = "TableNumber"
+            };
+            tableViewerDgv.Columns.Add(tableNumberColumn);
+
+            var capacityColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "Capacity",
+                HeaderText = "Вместимость",
+                DataPropertyName = "Capacity"
+            };
+            tableViewerDgv.Columns.Add(capacityColumn);
+
+            tableViewerDgv.AllowUserToDeleteRows = true;
+        }
+
         private void tableViewerDgv_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             tableViewerDgv.EndEdit();
@@ -548,16 +770,16 @@ namespace KitchenBoss.AppForms
             {
                 var customers = context.Customers
                     .ToList()
-                    .Select(c => new
+                    .Select(c => new CustomerViewModel
                     {
                         CustomerID = c.CustomerID,
-                        FullName = $"{c.FirstName} {c.LastName}",
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
                         PhoneNumber = c.PhoneNumber,
                         Email = c.Email
-                    })
-                    .ToList();
+                    }).ToList();
 
-                tableViewerDgv.DataSource = new BindingList<dynamic>(customers.Cast<dynamic>().ToList());
+                tableViewerDgv.DataSource = new BindingList<CustomerViewModel>(customers);
             }
         }
 
@@ -765,6 +987,65 @@ namespace KitchenBoss.AppForms
             }
         }
 
+        private void LoadDishesData()
+        {
+            using (var context = Program.context)
+            {
+                var categories = context.DishCategories.ToList();
+
+                var categoryColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["CategoryID"];
+
+                if (categoryColumn != null)
+                {
+                    categoryColumn.DataSource = categories;
+                    categoryColumn.DisplayMember = "CategoryName";
+                    categoryColumn.ValueMember = "CategoryID";
+                }
+
+                var dishes = context.Dishes
+                    .Include(d => d.DishCategory)
+                    .ToList()
+                    .Select(d => new DishViewModel
+                    {
+                        DishID = d.DishID,
+                        DishName = d.DishName,
+                        CategoryID = d.CategoryID,
+                        Price = d.Price,
+                        Description = d.Description,
+                        CategoryName = d.DishCategory?.CategoryName
+                    }).ToList();
+
+                tableViewerDgv.DataSource = new BindingList<DishViewModel>(dishes);
+            }
+        }
+
+        private void LoadDishCategoriesData()
+        {
+            using (var context = Program.context)
+            {
+                var categories = context.DishCategories.ToList();
+                tableViewerDgv.DataSource = new BindingList<DishCategory>(categories);
+            }
+        }
+
+        private void LoadIngredientsData()
+        {
+            using (var context = Program.context)
+            {
+                var ingredients = context.Ingredients.ToList();
+                tableViewerDgv.DataSource = new BindingList<Ingredient>(ingredients);
+            }
+        }
+
+        private void LoadTablesData()
+        {
+            using (var context = Program.context)
+            {
+                var tables = context.Tables.ToList();
+                tableViewerDgv.DataSource = new BindingList<Table>(tables);
+            }
+        }
+
         private void tableViewerDgv_CellValueChanged_OrderItems(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -877,6 +1158,14 @@ namespace KitchenBoss.AppForms
                     return;
                 SaveUserData();
             }
+            else if (isDishesMode)
+                SaveDishesData();
+            else if (isDishCategoriesMode)
+                SaveDishCategoriesData();
+            else if (isIngredientsMode)
+                SaveIngredientsData();
+            else if (isTablesMode)
+                SaveTablesData();
             else
                 SaveEmployeesData();
         }
@@ -1068,69 +1357,40 @@ namespace KitchenBoss.AppForms
                         var customerId = Convert.ToInt32(row.Cells["CustomerID"].Value ?? 0);
                         var customer = context.Customers.Find(customerId);
 
+                        var firstName = row.Cells["FirstName"].Value?.ToString();
+                        var lastName = row.Cells["LastName"].Value?.ToString();
+
+                        if (string.IsNullOrWhiteSpace(firstName))
+                        {
+                            MessageBox.Show("Имя клиента не может быть пустым", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
                         if (customer != null)
                         {
-                            var fullName = row.Cells["FullName"].Value?.ToString()?.Split(' ');
-                            if (fullName != null && fullName.Length >= 2)
-                            {
-                                customer.FirstName = fullName[0];
-                                customer.LastName = string.Join(" ", fullName.Skip(1));
-                            }
-                            else if (fullName != null && fullName.Length == 1)
-                            {
-                                customer.FirstName = fullName[0];
-                                customer.LastName = "";
-                            }
-                            else
-                            {
-                                MessageBox.Show("Необходимо ввести Имя и Фамилию", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return;
-                            }
-
-
+                            customer.FirstName = firstName;
+                            customer.LastName = lastName ?? "";
                             customer.PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString();
                             customer.Email = row.Cells["Email"].Value?.ToString();
                         }
                         else
                         {
-                            var fullName = row.Cells["FullName"].Value?.ToString()?.Split(' ');
-
-                            if (fullName != null && fullName.Length >= 2)
+                            var newCustomer = new Customer
                             {
-                                var newCustomer = new Customer
-                                {
-                                    FirstName = fullName[0],
-                                    LastName = string.Join(" ", fullName.Skip(1)),
-                                    PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString(),
-                                    Email = row.Cells["Email"].Value?.ToString()
-                                };
-
-                                context.Customers.Add(newCustomer);
-                            }
-                            else if (fullName != null && fullName.Length == 1)
-                            {
-                                var newCustomer = new Customer
-                                {
-                                    FirstName = fullName[0],
-                                    LastName = "",
-                                    PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString(),
-                                    Email = row.Cells["Email"].Value?.ToString()
-                                };
-
-                                context.Customers.Add(newCustomer);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Необходимо ввести Имя и Фамилию", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return;
-                            }
+                                FirstName = firstName,
+                                LastName = lastName ?? "",
+                                PhoneNumber = row.Cells["PhoneNumber"].Value?.ToString(),
+                                Email = row.Cells["Email"].Value?.ToString()
+                            };
+                            context.Customers.Add(newCustomer);
                         }
                     }
 
                     context.SaveChanges();
                     isChanged = false;
                     saveButton.Enabled = false;
-                    MessageBox.Show("Данные о клиентах успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Данные клиентов успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadCustomersData();
                 }
                 catch (Exception ex)
                 {
@@ -1307,6 +1567,172 @@ namespace KitchenBoss.AppForms
             }
         }
 
+        private void SaveDishesData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var dishId = Convert.ToInt32(row.Cells["DishID"].Value ?? 0);
+                        var dish = context.Dishes.Find(dishId);
+
+                        if (dish != null)
+                        {
+                            dish.DishName = row.Cells["DishName"].Value?.ToString();
+                            dish.CategoryID = (int)row.Cells["CategoryID"].Value;
+                            dish.Price = Convert.ToDecimal(row.Cells["Price"].Value);
+                            dish.Description = row.Cells["Description"].Value?.ToString();
+                        }
+                        else
+                        {
+                            var newDish = new Dish
+                            {
+                                DishName = row.Cells["DishName"].Value?.ToString(),
+                                CategoryID = (int)row.Cells["CategoryID"].Value,
+                                Price = Convert.ToDecimal(row.Cells["Price"].Value),
+                                Description = row.Cells["Description"].Value?.ToString()
+                            };
+                            context.Dishes.Add(newDish);
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+                    MessageBox.Show("Данные о блюдах успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении блюд: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveDishCategoriesData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var categoryId = Convert.ToInt32(row.Cells["CategoryID"].Value ?? 0);
+                        var category = context.DishCategories.Find(categoryId);
+
+                        if (category != null)
+                        {
+                            category.CategoryName = row.Cells["CategoryName"].Value?.ToString();
+                        }
+                        else
+                        {
+                            var newCategory = new DishCategory
+                            {
+                                CategoryName = row.Cells["CategoryName"].Value?.ToString()
+                            };
+                            context.DishCategories.Add(newCategory);
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+                    MessageBox.Show("Данные о категориях блюд успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении категорий блюд: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveIngredientsData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var ingredientId = Convert.ToInt32(row.Cells["IngredientID"].Value ?? 0);
+                        var ingredient = context.Ingredients.Find(ingredientId);
+
+                        if (ingredient != null)
+                        {
+                            ingredient.IngredientName = row.Cells["IngredientName"].Value?.ToString();
+                            ingredient.Unit = row.Cells["Unit"].Value?.ToString();
+                        }
+                        else
+                        {
+                            var newIngredient = new Ingredient
+                            {
+                                IngredientName = row.Cells["IngredientName"].Value?.ToString(),
+                                Unit = row.Cells["Unit"].Value?.ToString()
+                            };
+                            context.Ingredients.Add(newIngredient);
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+                    MessageBox.Show("Данные об ингредиентах успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении ингредиентов: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void SaveTablesData()
+        {
+            using (var context = Program.context)
+            {
+                try
+                {
+                    foreach (DataGridViewRow row in tableViewerDgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        var tableId = Convert.ToInt32(row.Cells["TableID"].Value ?? 0);
+                        var table = context.Tables.Find(tableId);
+
+                        if (table != null)
+                        {
+                            table.TableNumber = Convert.ToInt32(row.Cells["TableNumber"].Value);
+                            table.Capacity = Convert.ToInt32(row.Cells["Capacity"].Value);
+                        }
+                        else
+                        {
+                            var newTable = new Table
+                            {
+                                TableNumber = Convert.ToInt32(row.Cells["TableNumber"].Value),
+                                Capacity = Convert.ToInt32(row.Cells["Capacity"].Value)
+                            };
+                            context.Tables.Add(newTable);
+                        }
+                    }
+
+                    context.SaveChanges();
+                    isChanged = false;
+                    saveButton.Enabled = false;
+                    MessageBox.Show("Данные о столиках успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении столиков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
         private string HashPassword(string password, string salt)
         {
             string passwordWithSalt = salt + password;
@@ -1469,6 +1895,18 @@ namespace KitchenBoss.AppForms
                 }
             }
         }
+
+        private void dishesCategoriesButton_Click(object sender, EventArgs e)
+        {
+            fmTableViewer dishCategoriesForm = new fmTableViewer(dishCategoriesMode: true);
+            dishCategoriesForm.Show();
+        }
+
+        private void dishesIngredientsButton_Click(object sender, EventArgs e)
+        {
+            fmTableViewer ingredientsForm = new fmTableViewer(ingredientsMode: true);
+            ingredientsForm.Show();
+        }
     }
 
     public class EmployeeViewModel
@@ -1506,4 +1944,23 @@ namespace KitchenBoss.AppForms
         public string Password { get; set; }
     }
 
+    public class DishViewModel
+    {
+        public int DishID { get; set; }
+        public string DishName { get; set; }
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public decimal Price { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class CustomerViewModel
+    {
+        public int CustomerID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+    }
 }

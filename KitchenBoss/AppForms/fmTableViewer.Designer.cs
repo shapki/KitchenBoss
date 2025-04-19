@@ -39,6 +39,8 @@
             this.positionsButton = new System.Windows.Forms.Button();
             this.clientOrderDishesButton = new System.Windows.Forms.Button();
             this.buttonsPanel = new System.Windows.Forms.Panel();
+            this.dishesCategoriesButton = new System.Windows.Forms.Button();
+            this.dishesIngredientsButton = new System.Windows.Forms.Button();
             this.headerPanel.SuspendLayout();
             this.headerLogoBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).BeginInit();
@@ -195,6 +197,8 @@
             this.buttonsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.buttonsPanel.Controls.Add(this.dishesIngredientsButton);
+            this.buttonsPanel.Controls.Add(this.dishesCategoriesButton);
             this.buttonsPanel.Controls.Add(this.positionsButton);
             this.buttonsPanel.Controls.Add(this.clientOrderDishesButton);
             this.buttonsPanel.Controls.Add(this.saveButton);
@@ -202,6 +206,50 @@
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.Size = new System.Drawing.Size(500, 40);
             this.buttonsPanel.TabIndex = 24;
+            // 
+            // dishesCategoriesButton
+            // 
+            this.dishesCategoriesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.dishesCategoriesButton.BackColor = System.Drawing.Color.White;
+            this.dishesCategoriesButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.dishesCategoriesButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+            this.dishesCategoriesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.dishesCategoriesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dishesCategoriesButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.dishesCategoriesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.dishesCategoriesButton.Image = global::KitchenBoss.Properties.Resources.regular_dish_category_x20;
+            this.dishesCategoriesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.dishesCategoriesButton.Location = new System.Drawing.Point(147, 5);
+            this.dishesCategoriesButton.Name = "dishesCategoriesButton";
+            this.dishesCategoriesButton.Size = new System.Drawing.Size(129, 30);
+            this.dishesCategoriesButton.TabIndex = 24;
+            this.dishesCategoriesButton.Text = "Категории блюд";
+            this.dishesCategoriesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.dishesCategoriesButton.UseVisualStyleBackColor = false;
+            this.dishesCategoriesButton.Visible = false;
+            this.dishesCategoriesButton.Click += new System.EventHandler(this.dishesCategoriesButton_Click);
+            // 
+            // dishesIngredientsButton
+            // 
+            this.dishesIngredientsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.dishesIngredientsButton.BackColor = System.Drawing.Color.White;
+            this.dishesIngredientsButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.dishesIngredientsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+            this.dishesIngredientsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.dishesIngredientsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dishesIngredientsButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.dishesIngredientsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.dishesIngredientsButton.Image = global::KitchenBoss.Properties.Resources.regular_ingredients_x20;
+            this.dishesIngredientsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.dishesIngredientsButton.Location = new System.Drawing.Point(186, 5);
+            this.dishesIngredientsButton.Name = "dishesIngredientsButton";
+            this.dishesIngredientsButton.Size = new System.Drawing.Size(113, 30);
+            this.dishesIngredientsButton.TabIndex = 25;
+            this.dishesIngredientsButton.Text = "Ингредиенты";
+            this.dishesIngredientsButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.dishesIngredientsButton.UseVisualStyleBackColor = false;
+            this.dishesIngredientsButton.Visible = false;
+            this.dishesIngredientsButton.Click += new System.EventHandler(this.dishesIngredientsButton_Click);
             // 
             // fmTableViewer
             // 
@@ -241,5 +289,7 @@
         private System.Windows.Forms.Panel buttonsPanel;
         private System.Windows.Forms.Label headerTitleLabel;
         private System.Windows.Forms.Label headerSubtitleLabel;
+        private System.Windows.Forms.Button dishesCategoriesButton;
+        private System.Windows.Forms.Button dishesIngredientsButton;
     }
 }

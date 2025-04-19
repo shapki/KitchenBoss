@@ -241,6 +241,7 @@
             // 
             this.recoveryLink.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(35)))), ((int)(((byte)(50)))));
             this.recoveryLink.AutoSize = true;
+            this.recoveryLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.recoveryLink.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.recoveryLink.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.recoveryLink.Location = new System.Drawing.Point(245, 150);
@@ -250,6 +251,7 @@
             this.recoveryLink.TabStop = true;
             this.recoveryLink.Text = "Восстановить пароль";
             this.recoveryLink.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.recoveryLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.recoveryLink_LinkClicked);
             // 
             // fmLogin
             // 

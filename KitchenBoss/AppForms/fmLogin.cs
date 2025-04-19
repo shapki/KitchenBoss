@@ -149,5 +149,17 @@ namespace KitchenBoss.AppForms
                 usernameTextBox.ForeColor = Color.FromArgb(150, 150, 150);
             }
         }
+
+        private void recoveryLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            using (var recoveryForm = new fmPasswordRecovery())
+            {
+                if (recoveryForm.ShowDialog() == DialogResult.OK)
+                {
+                    MessageBox.Show("Пароль успешно изменен. Теперь вы можете войти с новым паролем.",
+                        "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
     }
 }
