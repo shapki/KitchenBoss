@@ -8,9 +8,12 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
+    /// <summary>
+    /// PKGH Форма для авторизации пользователя.
+    /// </summary>
     public partial class fmLogin : Form
     {
-        private bool _showingPassword = true;
+        private bool _isShowingPassword = true;
 
         public fmLogin()
         {
@@ -19,14 +22,17 @@ namespace KitchenBoss.AppForms
 
         private void showPasswordPictureBox_Click(object sender, EventArgs e)
         {
-            ChangePasswordCharsVisibility();
+            TogglePasswordVisibility();
         }
 
-        private void ChangePasswordCharsVisibility()
+        /// <summary>
+        /// PKGH Изменение видимости символов в текстовом поле пароля.
+        /// </summary>
+        private void TogglePasswordVisibility()
         {
-            _showingPassword = !_showingPassword;
-            passwordTextBox.UseSystemPasswordChar = _showingPassword;
-            showPasswordPictureBox.Image = _showingPassword
+            _isShowingPassword = !_isShowingPassword;
+            passwordTextBox.UseSystemPasswordChar = _isShowingPassword;
+            showPasswordPictureBox.Image = _isShowingPassword
                 ? Resources.regular_eye_x20
                 : Resources.regular_eye_DISMISS_x20;
         }
@@ -44,10 +50,8 @@ namespace KitchenBoss.AppForms
 
             try
             {
-                // Ищем сотрудника по телефону или email
-                System.Linq.Expressions.Expression<Func<AppModels.Employee, bool>> predicate = emp => emp.PhoneNumber == loginInput || emp.Email == loginInput;
-
-                var employee = Program.context.Employees.FirstOrDefault(predicate);
+                var employee = Program.context.Employees
+                    .FirstOrDefault(emp => emp.PhoneNumber == loginInput || emp.Email == loginInput);
 
                 if (employee == null)
                 {
@@ -55,25 +59,19 @@ namespace KitchenBoss.AppForms
                     return;
                 }
 
-                // Ищем пользователя по EmployeeID
                 var user = Program.context.Users.FirstOrDefault(u => u.EmployeeID == employee.EmployeeID);
-
                 if (user == null)
                 {
                     MessageBox.Show("Пользователь не найден.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Хешируем введённый пароль
                 string salt = user.PasswordSalt.ToString();
                 string hashedPassword = HashPassword(password, salt);
 
                 if (Convert.ToBase64String(user.PasswordHash) == hashedPassword)
                 {
-                    // Открываем главную форму
-                    fmMain mainForm = new fmMain(employee.EmployeeID);
-                    mainForm.Show();
-                    this.Hide();
+                    OpenMainForm(employee.EmployeeID);
                 }
                 else
                 {
@@ -86,15 +84,27 @@ namespace KitchenBoss.AppForms
             }
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        /// <summary>
+        /// PKGH Открытие главной формы приложения.
+        /// </summary>
+        /// <param name="employeeId">Идентификатор сотрудника.</param>
+        private void OpenMainForm(int employeeId)
         {
-            CloseFormEvent();
+            var mainForm = new fmMain(employeeId);
+            mainForm.Show();
+            this.Hide();
         }
 
+        /// <summary>
+        /// PKGH Хеширование пароля с использованием соли.
+        /// </summary>
+        /// <param name="password">Пароль для хэширования.</param>
+        /// <param name="salt">Соль для усиления безопасности.</param>
+        /// <returns>Хэшированный пароль в формате Base64.</returns>
         private string HashPassword(string password, string salt)
         {
             string passwordWithSalt = salt + password;
-            using (SHA512 sha512 = SHA512.Create())
+            using (var sha512 = SHA512.Create())
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(passwordWithSalt);
                 byte[] hashBytes = sha512.ComputeHash(bytes);
@@ -102,34 +112,62 @@ namespace KitchenBoss.AppForms
             }
         }
 
-        private void CloseFormEvent(FormClosingEventArgs e)
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            CloseLoginForm();
+        }
+
+        private void CloseLoginForm()
         {
             this.FormClosing -= fmLogin_FormClosing;
+            DialogResult result = MessageBox.Show(
+                "Вы действительно хотите выйти из приложения?",
+                "Внимание",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
 
-            DialogResult result = MessageBox.Show("Вы действительно хотите выйти\nиз приложения?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
+            {
                 foreach (Form openForm in Application.OpenForms.Cast<Form>().ToArray())
+                {
                     openForm.Close();
+                }
+            }
+            else
+            {
+                this.FormClosing += fmLogin_FormClosing;
+            }
+        }
+
+        private void fmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            HandleFormClosing(e);
+        }
+
+        /// <summary>
+        /// PKGH Обработка запроса на закрытие формы.
+        /// </summary>
+        private void HandleFormClosing(FormClosingEventArgs e)
+        {
+            this.FormClosing -= fmLogin_FormClosing;
+            DialogResult result = MessageBox.Show(
+                "Вы действительно хотите выйти из приложения?",
+                "Внимание",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                foreach (Form openForm in Application.OpenForms.Cast<Form>().ToArray())
+                {
+                    openForm.Close();
+                }
+            }
             else
             {
                 e.Cancel = true;
                 this.FormClosing += fmLogin_FormClosing;
             }
-        }
-
-        private void CloseFormEvent()
-        {
-            this.FormClosing -= fmLogin_FormClosing;
-
-            DialogResult result = MessageBox.Show("Вы действительно хотите выйти\nиз приложения?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
-                foreach (Form openForm in Application.OpenForms.Cast<Form>().ToArray())
-                    openForm.Close();
-        }
-
-        private void fmLogin_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            CloseFormEvent(e);
         }
 
         private void usernameTextBox_Enter(object sender, EventArgs e)
@@ -156,8 +194,11 @@ namespace KitchenBoss.AppForms
             {
                 if (recoveryForm.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show("Пароль успешно изменен. Теперь вы можете войти с новым паролем.",
-                        "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "Пароль успешно изменен. Теперь вы можете войти с новым паролем.",
+                        "Успех",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
         }

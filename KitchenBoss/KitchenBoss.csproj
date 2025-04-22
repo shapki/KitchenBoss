@@ -58,6 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppData\CustomerViewModel.cs" />
+    <Compile Include="AppData\DishViewModel.cs" />
+    <Compile Include="AppData\EmployeeViewModel.cs" />
+    <Compile Include="AppData\OrderViewModel.cs" />
+    <Compile Include="AppData\UserViewModel.cs" />
     <Compile Include="AppForms\fmPasswordRecovery.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,8 +176,6 @@
     <None Include="Resources\regular_login_x20white.png" />
     <Content Include="Shapkin_KitchenBoss.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AppData\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

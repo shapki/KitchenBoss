@@ -4,31 +4,51 @@ using System.Windows.Forms;
 
 namespace KitchenBoss.AppForms
 {
+    /// <summary>
+    /// PKGH Главная форма.
+    /// </summary>
     public partial class fmMain : Form
     {
-        private int _employeeID; // Для хранения ID сотрудника
+        private int _employeeId;
 
-        public fmMain(int employeeID)
+        public fmMain(int employeeId)
         {
             InitializeComponent();
-            _employeeID = employeeID; // Сохраняем EmployeeID
+            _employeeId = employeeId; // Сохраняем ID сотрудника
+            InitializeEmployeeInfo();
+            ConfigureAccessRights();
+        }
 
-            // Получаем ФИО и должность сотрудника
-            string employeeFullNameAndPosition = GetEmployeeFullNameAndPosition(_employeeID);
+        /// <summary>
+        /// PKGH Инициализация информации о сотруднике на форме.
+        /// </summary>
+        private void InitializeEmployeeInfo()
+        {
+            string employeeFullNameAndPosition = GetEmployeeFullNameAndPosition(_employeeId);
             loginAndPositionLabel.Text = employeeFullNameAndPosition;
+        }
 
-            // Определяем права доступа на основе должности
-            string position = GetUserPosition(_employeeID);
+        /// <summary>
+        /// PKGH Настройка прав доступа на основе должности сотрудника.
+        /// </summary>
+        private void ConfigureAccessRights()
+        {
+            string position = GetUserPosition(_employeeId);
             userControlButton.Enabled = (position == "Менеджер");
         }
 
-        private string GetEmployeeFullNameAndPosition(int employeeID)
+        /// <summary>
+        /// PKGH Получение ФИО и должности сотрудника.
+        /// </summary>
+        /// <param name="employeeId">Идентификатор сотрудника.</param>
+        /// <returns>Строка с ФИО и должностью сотрудника.</returns>
+        private string GetEmployeeFullNameAndPosition(int employeeId)
         {
             try
             {
                 using (var context = Program.context)
                 {
-                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeID);
+                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeId);
                     if (employee == null)
                     {
                         return "Сотрудник не найден\nДоступ: Не определён";
@@ -37,7 +57,6 @@ namespace KitchenBoss.AppForms
                     var position = context.Positions.FirstOrDefault(p => p.PositionID == employee.PositionID);
                     string fullName = $"{employee.FirstName} {employee.LastName}";
                     string positionName = position?.PositionName ?? "Не определена";
-
                     return $"ФИО: {fullName}\nДоступ: {positionName}";
                 }
             }
@@ -48,13 +67,18 @@ namespace KitchenBoss.AppForms
             }
         }
 
-        private string GetUserPosition(int employeeID)
+        /// <summary>
+        /// PKGH Получение должности сотрудника.
+        /// </summary>
+        /// <param name="employeeId">Идентификатор сотрудника.</param>
+        /// <returns>Название должности сотрудника.</returns>
+        private string GetUserPosition(int employeeId)
         {
             try
             {
                 using (var context = Program.context)
                 {
-                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeID);
+                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeId);
                     if (employee == null)
                     {
                         return string.Empty;
@@ -71,6 +95,9 @@ namespace KitchenBoss.AppForms
             }
         }
 
+        /// <summary>
+        /// PKGH Закрытие определённых форм.
+        /// </summary>
         public static void CloseSpecificForms()
         {
             var formsToClose = new[]

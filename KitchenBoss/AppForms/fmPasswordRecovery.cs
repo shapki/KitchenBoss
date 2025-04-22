@@ -7,20 +7,26 @@ using System.Windows.Forms;
 namespace KitchenBoss.AppForms
 {
     /// <summary>
-    /// TODO: Подогнать под требования
-    /// TODO: Написать summary-комментарии
+    /// PKGH Форма для восстановления пароля пользователя.
     /// </summary>
     public partial class fmPasswordRecovery : Form
     {
         private string _tempCode;
         private int? _employeeId;
-        private bool _showingNewPassword = false;
-        private bool _showingConfirmPassword = false;
+        private bool _isShowingNewPassword = false;
+        private bool _isShowingConfirmPassword = false;
 
         public fmPasswordRecovery()
         {
             InitializeComponent();
+            InitializeFormControls();
+        }
 
+        /// <summary>
+        /// PKGH Инициализация элементы управления формы.
+        /// </summary>
+        private void InitializeFormControls()
+        {
             txtNewPassword.UseSystemPasswordChar = true;
             txtConfirmPassword.UseSystemPasswordChar = true;
             btnCancel.Size = new Size(340, 36);
@@ -28,15 +34,24 @@ namespace KitchenBoss.AppForms
             Size = new Size(416, 287);
         }
 
-        private void TogglePasswordVisibility(TextBox passwordBox, PictureBox eyeIcon, ref bool showingPassword)
+        /// <summary>
+        /// PKGH Переключение видимости пароля в текстовом поле.
+        /// </summary>
+        /// <param name="passwordBox">Текстовое поле для ввода пароля.</param>
+        /// <param name="eyeIcon">Иконка для отображения состояния видимости пароля.</param>
+        /// <param name="isShowingPassword">Флаг, указывающий текущее состояние видимости пароля.</param>
+        private void TogglePasswordVisibility(TextBox passwordBox, PictureBox eyeIcon, ref bool isShowingPassword)
         {
-            showingPassword = !showingPassword;
-            passwordBox.UseSystemPasswordChar = !showingPassword;
-            eyeIcon.Image = showingPassword
+            isShowingPassword = !isShowingPassword;
+            passwordBox.UseSystemPasswordChar = !isShowingPassword;
+            eyeIcon.Image = isShowingPassword
                 ? KitchenBoss.Properties.Resources.regular_eye_DISMISS_x20
                 : KitchenBoss.Properties.Resources.regular_eye_x20;
         }
 
+        /// <summary>
+        /// PKGH Обработка отправки кода подтверждения на email или телефон.
+        /// </summary>
         private void btnSendCode_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtEmailAndPhone.Text))
@@ -58,7 +73,6 @@ namespace KitchenBoss.AppForms
                 }
 
                 _employeeId = employee.EmployeeID;
-
                 var random = new Random();
                 _tempCode = random.Next(100000, 999999).ToString();
 
@@ -77,6 +91,9 @@ namespace KitchenBoss.AppForms
             }
         }
 
+        /// <summary>
+        /// PKGH Проверка введенного кода подтверждения.
+        /// </summary>
         private void btnVerify_Click(object sender, EventArgs e)
         {
             if (txtCode.Text != _tempCode)
@@ -91,6 +108,9 @@ namespace KitchenBoss.AppForms
             txtNewPassword.Focus();
         }
 
+        /// <summary>
+        /// PKGH Сохранение нового пароля пользователя.
+        /// </summary>
         private void btnSavePassword_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNewPassword.Text))
@@ -118,15 +138,13 @@ namespace KitchenBoss.AppForms
 
                     var newSalt = Guid.NewGuid();
                     string hashedPassword = HashPassword(txtNewPassword.Text, newSalt.ToString());
-
                     user.PasswordHash = Convert.FromBase64String(hashedPassword);
                     user.PasswordSalt = newSalt;
-
                     context.SaveChanges();
 
                     MessageBox.Show("Пароль успешно изменен", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
             }
             catch (Exception ex)
@@ -135,6 +153,12 @@ namespace KitchenBoss.AppForms
             }
         }
 
+        /// <summary>
+        /// PKGH Хеширование пароля с использованием соли.
+        /// </summary>
+        /// <param name="password">Пароль для хэширования.</param>
+        /// <param name="salt">Соль для усиления безопасности.</param>
+        /// <returns>Хэшированный пароль в формате Base64.</returns>
         private string HashPassword(string password, string salt)
         {
             string passwordWithSalt = salt + password;
@@ -148,18 +172,18 @@ namespace KitchenBoss.AppForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void pictureBoxNewPassword_Click(object sender, EventArgs e)
         {
-            TogglePasswordVisibility(txtNewPassword, pictureBoxNewPassword, ref _showingNewPassword);
+            TogglePasswordVisibility(txtNewPassword, pictureBoxNewPassword, ref _isShowingNewPassword);
         }
 
         private void pictureBoxConfirmPassword_Click(object sender, EventArgs e)
         {
-            TogglePasswordVisibility(txtConfirmPassword, pictureBoxConfirmPassword, ref _showingConfirmPassword);
+            TogglePasswordVisibility(txtConfirmPassword, pictureBoxConfirmPassword, ref _isShowingConfirmPassword);
         }
 
         private void txtEmailAndPhone_KeyDown(object sender, KeyEventArgs e)

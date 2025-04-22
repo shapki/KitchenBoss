@@ -320,11 +320,6 @@ SELECT * FROM [Table];
 USE Shapkin_KitchenBoss;
 GO
 
--- ВЫПОЛНИТЬ В БД КОЛЛЕДЖА
-TRUNCATE TABLE Users;
-DROP TABLE Users;
-DROP FUNCTION HashPassword;
-
 CREATE TABLE Users (
     UserID INT PRIMARY KEY IDENTITY(1,1),
     EmployeeID INT NOT NULL UNIQUE,
@@ -335,3 +330,40 @@ CREATE TABLE Users (
 GO
 
 SELECT * FROM Users;
+
+
+-- Для удаления всех таблиц
+--ALTER TABLE Employee
+--DROP CONSTRAINT FK_Employee_Position;
+--ALTER TABLE Dish
+--DROP CONSTRAINT FM_Dish_Category;
+--ALTER TABLE DishIngredient
+--DROP CONSTRAINT FK_DishIngredient_Dish;
+--ALTER TABLE DishIngredient
+--DROP CONSTRAINT FK_DishIngredient_Ingredient;
+--ALTER TABLE [Order]
+--DROP CONSTRAINT FK_Order_Customer;
+--ALTER TABLE [Order]
+--DROP CONSTRAINT FK_Order_Table;
+--ALTER TABLE [Order]
+--DROP CONSTRAINT FK_Order_Employee;
+--ALTER TABLE [Order]
+--DROP CONSTRAINT FK_Order_OrderStatus;
+--ALTER TABLE OrderItem
+--DROP CONSTRAINT FK_OrderItem_Order;
+--ALTER TABLE OrderItem
+--DROP CONSTRAINT FK_OrderItem_Dish;
+--ALTER TABLE [Users]
+--DROP CONSTRAINT FK_Users_Employee;
+--DROP TABLE Customer;
+--DROP TABLE Dish;
+--DROP TABLE DishCategory;
+--DROP TABLE DishIngredient;
+--DROP TABLE Employee;
+--DROP TABLE Ingredient;
+--DROP TABLE [Order];
+--DROP TABLE OrderItem;
+--DROP TABLE OrderStatus;
+--DROP TABLE Position;
+--DROP TABLE [Table];
+--DROP TABLE [Users];
