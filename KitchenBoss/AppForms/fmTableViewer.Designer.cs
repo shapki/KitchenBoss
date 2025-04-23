@@ -182,9 +182,9 @@
             this.clientOrderDishesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.clientOrderDishesButton.Image = global::KitchenBoss.Properties.Resources.regular_orders_x20;
             this.clientOrderDishesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.clientOrderDishesButton.Location = new System.Drawing.Point(130, 5);
+            this.clientOrderDishesButton.Location = new System.Drawing.Point(113, 5);
             this.clientOrderDishesButton.Name = "clientOrderDishesButton";
-            this.clientOrderDishesButton.Size = new System.Drawing.Size(110, 30);
+            this.clientOrderDishesButton.Size = new System.Drawing.Size(127, 30);
             this.clientOrderDishesButton.TabIndex = 23;
             this.clientOrderDishesButton.Text = "Позиции заказа";
             this.clientOrderDishesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

@@ -32,16 +32,8 @@ namespace KitchenBoss.AppForms
         private bool _isDishCategoriesMode = false;
         private bool _isIngredientsMode = false;
         private bool _isTablesMode = false;
-
-        /// <summary>
-        /// PKGH Конструктор по умолчанию для инициализации формы в режиме отображения данных о сотрудниках.
-        /// </summary>
-        public fmTableViewer()
-        {
-            InitializeComponent();
-            SetupDataGridView();
-            LoadData();
-        }
+        private int? _employeeId = null;
+        private string _positionName = null;
 
         /// <summary>
         /// PKGH Конструктор для инициализации формы в различных режимах отображения данных.
@@ -58,11 +50,12 @@ namespace KitchenBoss.AppForms
         /// <param name="dishCategoriesMode">Нужно ли отображать данные о категориях блюд.</param>
         /// <param name="ingredientsMode">Нужно ли отображать данные об ингредиентах.</param>
         /// <param name="tablesMode">Нужно ли отображать данные о столиках.</param>
+        /// <param name="position">Должность текущего пользователя.</param>
         public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false,
                             int? customerId = null, int? orderId = null, bool orderItemsMode = false,
                             bool userControlMode = false, bool userControlOnlyManager = false,
                             bool dishesMode = false, bool dishCategoriesMode = false, bool ingredientsMode = false,
-                            bool tablesMode = false)
+                            bool tablesMode = false, int? employeeId = null)
         {
             InitializeComponent();
 
@@ -79,7 +72,40 @@ namespace KitchenBoss.AppForms
             _isIngredientsMode = ingredientsMode;
             _isTablesMode = tablesMode;
 
+            _employeeId = employeeId;
+            if (_employeeId != null)
+                _positionName = GetEmployeePosition(_employeeId);
+
             ConfigureFormForMode();
+        }
+
+        /// <summary>
+        /// PKGH Получение должности сотрудника.
+        /// </summary>
+        /// <param name="employeeId">Идентификатор сотрудника.</param>
+        /// <returns>Строка с должностью сотрудника.</returns>
+        private string GetEmployeePosition(int? employeeId)
+        {
+            try
+            {
+                using (var context = Program.context)
+                {
+                    var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeId);
+                    if (employee == null)
+                    {
+                        return "Сотрудник не найден\nДоступ: Не определён";
+                    }
+
+                    var position = context.Positions.FirstOrDefault(p => p.PositionID == employee.PositionID);
+                    string positionName = position?.PositionName ?? "Не определена";
+                    return positionName;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при получении данных сотрудника: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return "Ошибка";
+            }
         }
 
         /// <summary>
@@ -1741,7 +1767,8 @@ namespace KitchenBoss.AppForms
 
         private void positionsButton_Click(object sender, EventArgs e)
         {
-            OpenPositionsForm();
+            fmTableViewer positionsForm = new fmTableViewer(positionsMode: true, employeeId: _employeeId);
+            positionsForm.Show();
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -1797,7 +1824,7 @@ namespace KitchenBoss.AppForms
                             OrderViewModel order = selectedRow.DataBoundItem as OrderViewModel;
                             if (order != null)
                             {
-                                fmTableViewer orderItemsForm = new fmTableViewer(false, false, false, order.CustomerID, order.OrderID, true);
+                                fmTableViewer orderItemsForm = new fmTableViewer(customerId: order.CustomerID, orderId: order.OrderID, orderItemsMode: true, employeeId: _employeeId);
                                 orderItemsForm.Show();
                             }
                             else
@@ -1814,13 +1841,13 @@ namespace KitchenBoss.AppForms
 
         private void dishesCategoriesButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer dishCategoriesForm = new fmTableViewer(dishCategoriesMode: true);
+            fmTableViewer dishCategoriesForm = new fmTableViewer(dishCategoriesMode: true, employeeId: _employeeId);
             dishCategoriesForm.Show();
         }
 
         private void dishesIngredientsButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer ingredientsForm = new fmTableViewer(ingredientsMode: true);
+            fmTableViewer ingredientsForm = new fmTableViewer(ingredientsMode: true, employeeId: _employeeId);
             ingredientsForm.Show();
         }
 
@@ -1837,7 +1864,10 @@ namespace KitchenBoss.AppForms
                 Size = new Size(497, 431);
                 tableViewerDgv.Size = new Size(457, 280);
                 saveButton.Location = new Point(380, 5);
+                tableViewerDgv.ReadOnly = _positionName != "Менеджер";
+                saveButton.Visible = _positionName == "Менеджер";
             }
+
             else if (_isCustomersMode)
             {
                 Text = "KitchenBoss - Клиенты";
@@ -1846,6 +1876,8 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 SetupCustomersDataGridView();
                 LoadCustomersData();
+                tableViewerDgv.ReadOnly = _positionName == "Повар" || _positionName == "Повар-стажер";
+                saveButton.Visible = _positionName != "Повар" || _positionName != "Повар-стажер";
             }
             else if (_isOrdersMode)
             {
@@ -1856,9 +1888,11 @@ namespace KitchenBoss.AppForms
                 LoadOrdersData();
                 Size = new Size(682, 431);
                 tableViewerDgv.Size = new Size(642, 280);
-                saveButton.Location = new Point(516, 5);
-                clientOrderDishesButton.Location = new Point(400, 5);
+                saveButton.Location = new Point(556, 5);
+                clientOrderDishesButton.Location = new Point(420, 5);
                 clientOrderDishesButton.Visible = true;
+                tableViewerDgv.ReadOnly = _positionName == "Повар-стажер";
+                saveButton.Visible = _positionName != "Повар-стажер";
             }
             else if (_isOrderItemsMode)
             {
@@ -1895,6 +1929,8 @@ namespace KitchenBoss.AppForms
                 SetupUserControlDataGridView(false);
                 LoadUserData(false);
                 tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_UserControl;
+                tableViewerDgv.ReadOnly = _positionName != "Менеджер";
+                saveButton.Visible = _positionName == "Менеджер";
             }
             else if (_isDishesMode)
             {
@@ -1908,6 +1944,8 @@ namespace KitchenBoss.AppForms
                 dishesCategoriesButton.Location = new Point(10, 5);
                 dishesIngredientsButton.Visible = true;
                 dishesIngredientsButton.Location = new Point(145, 5);
+                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
+                saveButton.Visible = _positionName == "Менеджер" || _positionName != "Шеф-повар";
             }
             else if (_isDishCategoriesMode)
             {
@@ -1917,6 +1955,8 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 SetupDishCategoriesDataGridView();
                 LoadDishCategoriesData();
+                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
+                saveButton.Visible = _positionName == "Менеджер" || _positionName != "Шеф-повар";
             }
             else if (_isIngredientsMode)
             {
@@ -1926,6 +1966,8 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 SetupIngredientsDataGridView();
                 LoadIngredientsData();
+                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
+                saveButton.Visible = _positionName == "Менеджер" || _positionName == "Шеф-повар";
             }
             else if (_isTablesMode)
             {
@@ -1937,6 +1979,8 @@ namespace KitchenBoss.AppForms
                 dishesIngredientsButton.Visible = false;
                 SetupTablesDataGridView();
                 LoadTablesData();
+                tableViewerDgv.ReadOnly = _positionName == "Повар" || _positionName == "Повар-стажер";
+                saveButton.Visible = _positionName != "Повар" || _positionName != "Повар-стажер";
             }
             else
             {
@@ -1944,17 +1988,10 @@ namespace KitchenBoss.AppForms
                 LoadData();
                 Size = new Size(682, 431);
                 tableViewerDgv.Size = new Size(642, 280);
-                saveButton.Location = new Point(516, 5);
+                saveButton.Location = new Point(556, 5);
+                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
+                saveButton.Visible = _positionName == "Менеджер" || _positionName == "Шеф-повар";
             }
-        }
-
-        /// <summary>
-        /// PKGH Открывает форму для просмотра и редактирования должностей.
-        /// </summary>
-        private void OpenPositionsForm()
-        {
-            fmTableViewer positionsForm = new fmTableViewer(true);
-            positionsForm.Show();
         }
     }
 }

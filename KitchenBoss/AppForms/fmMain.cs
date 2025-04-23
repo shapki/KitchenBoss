@@ -35,6 +35,7 @@ namespace KitchenBoss.AppForms
         {
             string position = GetUserPosition(_employeeId);
             userControlButton.Enabled = (position == "Менеджер");
+            clientsButton.Enabled = (position != "Повар" || position != "Повар-стажер");
         }
 
         /// <summary>
@@ -153,37 +154,37 @@ namespace KitchenBoss.AppForms
 
         private void employeesButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer employeesForm = new fmTableViewer();
+            fmTableViewer employeesForm = new fmTableViewer(employeeId: _employeeId);
             employeesForm.Show();
         }
 
         private void userControlButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer userControlForm = new fmTableViewer(false, false, false, null, null, false, true);
+            fmTableViewer userControlForm = new fmTableViewer(userControlMode: true, employeeId: _employeeId);
             userControlForm.Show();
         }
 
         private void dishesButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer dishesForm = new fmTableViewer(false, false, false, null, null, false, false, false, true);
+            fmTableViewer dishesForm = new fmTableViewer(dishesMode: true, employeeId: _employeeId);
             dishesForm.Show();
         }
 
         private void clientsButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer clientsForm = new fmTableViewer(false, true);
+            fmTableViewer clientsForm = new fmTableViewer(customerMode: true, employeeId: _employeeId);
             clientsForm.Show();
         }
 
         private void ordersButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer ordersForm = new fmTableViewer(false, false, true);
+            fmTableViewer ordersForm = new fmTableViewer(ordersMode: true, employeeId: _employeeId);
             ordersForm.Show();
         }
 
         private void tablesButton_Click(object sender, EventArgs e)
         {
-            fmTableViewer tableForm = new fmTableViewer(false, false, false, null, null, false, false, false, false, false, false, true);
+            fmTableViewer tableForm = new fmTableViewer(tablesMode: true, employeeId: _employeeId);
             tableForm.Show();
         }
     }
