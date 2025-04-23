@@ -1,6 +1,6 @@
 ﻿namespace KitchenBoss.AppData
 {
-    public class CustomerViewModel
+    public class CustomerDto
     {
         public int CustomerID { get; set; }
         public string FirstName { get; set; }

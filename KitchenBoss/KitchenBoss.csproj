@@ -59,11 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppData\CustomerViewModel.cs" />
-    <Compile Include="AppData\DishViewModel.cs" />
-    <Compile Include="AppData\EmployeeViewModel.cs" />
-    <Compile Include="AppData\OrderViewModel.cs" />
-    <Compile Include="AppData\UserViewModel.cs" />
+    <Compile Include="AppData\CustomerDto.cs" />
+    <Compile Include="AppData\DishDto.cs" />
+    <Compile Include="AppData\EmployeeDto.cs" />
+    <Compile Include="AppData\OrderDto.cs" />
+    <Compile Include="AppData\PositionExtensions.cs" />
+    <Compile Include="AppData\UserDto.cs" />
     <Compile Include="AppForms\fmPasswordRecovery.cs">
       <SubType>Form</SubType>
     </Compile>

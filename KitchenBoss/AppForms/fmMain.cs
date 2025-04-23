@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KitchenBoss.AppData;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -34,8 +36,8 @@ namespace KitchenBoss.AppForms
         private void ConfigureAccessRights()
         {
             string position = GetUserPosition(_employeeId);
-            userControlButton.Enabled = (position == "Менеджер");
-            clientsButton.Enabled = (position != "Повар" || position != "Повар-стажер");
+            userControlButton.Enabled = (position == PositionExtensions.GetPositionDisplayName(Positions.Manager));
+            clientsButton.Enabled = (position != PositionExtensions.GetPositionDisplayName(Positions.Cook) || position != PositionExtensions.GetPositionDisplayName(Positions.CookTrainee));
         }
 
         /// <summary>

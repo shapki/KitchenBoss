@@ -2,7 +2,7 @@
 
 namespace KitchenBoss.AppData
 {
-    public class OrderViewModel
+    public class OrderDto
     {
         public int OrderID { get; set; }
         public int CustomerID { get; set; }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KitchenBoss.AppData
+﻿namespace KitchenBoss.AppData
 {
-    public class DishViewModel
+    public class DishDto
     {
         public int DishID { get; set; }
         public string DishName { get; set; }

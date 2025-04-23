@@ -8,7 +8,6 @@ namespace KitchenBoss.AppForms
 {
     internal static class Program
     {
-        public static KitchenBossModel oldContext = new KitchenBossModel();
         public static KitchenBossModel context { get { return new KitchenBossModel(); } }
 
         /// <summary>

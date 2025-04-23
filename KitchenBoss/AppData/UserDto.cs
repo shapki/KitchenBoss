@@ -1,6 +1,6 @@
 ﻿namespace KitchenBoss.AppData
 {
-    public class UserViewModel
+    public class UserDto
     {
         public int UserID { get; set; }
         public int EmployeeID { get; set; }

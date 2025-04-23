@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Drawing;
 using System.Globalization;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using KitchenBoss.AppData;
 using KitchenBoss.AppModels;
+using static KitchenBoss.AppForms.fmMain;
 
 namespace KitchenBoss.AppForms
 {
@@ -19,7 +21,7 @@ namespace KitchenBoss.AppForms
     public partial class fmTableViewer : Form
     {
         private bool _isChanged = false;
-        private readonly List<EmployeeViewModel> _deletedEmployees = new List<EmployeeViewModel>();
+        private readonly List<EmployeeDto> _deletedEmployees = new List<EmployeeDto>();
         private bool _isPositionsMode = false;
         private bool _isCustomersMode = false;
         private bool _isOrdersMode = false;
@@ -454,7 +456,7 @@ namespace KitchenBoss.AppForms
 
                 if (onlyManager)
                 {
-                    employeesQuery = employeesQuery.Where(e => e.Position.PositionName == "Менеджер");
+                    employeesQuery = employeesQuery.Where(e => e.Position.PositionName == PositionExtensions.GetPositionDisplayName(Positions.Manager));
                 }
 
                 var employees = employeesQuery.ToList()
@@ -630,19 +632,19 @@ namespace KitchenBoss.AppForms
         {
             using (var context = Program.context)
             {
-                List<Position> positions = context.Positions.ToList();
+                List<Position> Positions = context.Positions.ToList();
                 DataGridViewComboBoxColumn positionColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["PositionID"];
                 if (positionColumn != null)
                 {
-                    positionColumn.DataSource = positions;
+                    positionColumn.DataSource = Positions;
                     positionColumn.DisplayMember = "PositionName";
                     positionColumn.ValueMember = "PositionID";
                 }
 
-                List<EmployeeViewModel> employees = context.Employees
+                List<EmployeeDto> employees = context.Employees
                     .Include(e => e.Position)
                     .ToList()
-                    .Select(e => new EmployeeViewModel
+                    .Select(e => new EmployeeDto
                     {
                         EmployeeID = e.EmployeeID,
                         FullName = $"{e.FirstName} {e.LastName}",
@@ -653,7 +655,7 @@ namespace KitchenBoss.AppForms
                         PhoneNumber = e.PhoneNumber
                     }).ToList();
 
-                tableViewerDgv.DataSource = new BindingList<EmployeeViewModel>(employees);
+                tableViewerDgv.DataSource = new BindingList<EmployeeDto>(employees);
             }
         }
 
@@ -661,9 +663,9 @@ namespace KitchenBoss.AppForms
         {
             using (var context = Program.context)
             {
-                List<CustomerViewModel> customers = context.Customers
+                List<CustomerDto> customers = context.Customers
                     .ToList()
-                    .Select(c => new CustomerViewModel
+                    .Select(c => new CustomerDto
                     {
                         CustomerID = c.CustomerID,
                         FirstName = c.FirstName,
@@ -672,7 +674,7 @@ namespace KitchenBoss.AppForms
                         Email = c.Email
                     }).ToList();
 
-                tableViewerDgv.DataSource = new BindingList<CustomerViewModel>(customers);
+                tableViewerDgv.DataSource = new BindingList<CustomerDto>(customers);
             }
         }
 
@@ -680,8 +682,8 @@ namespace KitchenBoss.AppForms
         {
             using (var context = Program.context)
             {
-                List<Position> positions = context.Positions.ToList();
-                tableViewerDgv.DataSource = new BindingList<Position>(positions);
+                List<Position> Positions = context.Positions.ToList();
+                tableViewerDgv.DataSource = new BindingList<Position>(Positions);
             }
         }
 
@@ -742,7 +744,7 @@ namespace KitchenBoss.AppForms
                     tableColumn.ValueMember = "TableID";
                 }
 
-                List<OrderViewModel> orderViewModels = orders.Select(o => new OrderViewModel
+                List<OrderDto> orderViewModels = orders.Select(o => new OrderDto
                 {
                     OrderID = o.OrderID,
                     CustomerID = (int)o.CustomerID,
@@ -756,7 +758,7 @@ namespace KitchenBoss.AppForms
                     TotalAmount = o.TotalAmount
                 }).ToList();
 
-                tableViewerDgv.DataSource = new BindingList<OrderViewModel>(orderViewModels);
+                tableViewerDgv.DataSource = new BindingList<OrderDto>(orderViewModels);
 
                 var orderStatuses = context.OrderStatus.ToList();
                 DataGridViewComboBoxColumn orderStatusColumn = (DataGridViewComboBoxColumn)tableViewerDgv.Columns["OrderStatusID"];
@@ -827,7 +829,7 @@ namespace KitchenBoss.AppForms
             {
                 IQueryable<Employee> allEmployeesQuery = context.Employees.Include(e => e.Position);
                 if (onlyManager)
-                    allEmployeesQuery = allEmployeesQuery.Where(e => e.Position.PositionName == "Менеджер");
+                    allEmployeesQuery = allEmployeesQuery.Where(e => e.Position.PositionName == PositionExtensions.GetPositionDisplayName(Positions.Manager));
 
                 List<Employee> allEmployees = allEmployeesQuery.ToList();
 
@@ -852,7 +854,7 @@ namespace KitchenBoss.AppForms
                     })
                     .ToList();
 
-                List<UserViewModel> userViewModels = users.Select(u => new UserViewModel
+                List<UserDto> userViewModels = users.Select(u => new UserDto
                 {
                     UserID = u.UserID,
                     EmployeeID = u.EmployeeID,
@@ -875,7 +877,7 @@ namespace KitchenBoss.AppForms
                     employeeColumn.ValueMember = "EmployeeID";
                 }
 
-                tableViewerDgv.DataSource = new BindingList<UserViewModel>(userViewModels);
+                tableViewerDgv.DataSource = new BindingList<UserDto>(userViewModels);
                 tableViewerDgv.Refresh();
             }
         }
@@ -895,10 +897,10 @@ namespace KitchenBoss.AppForms
                     categoryColumn.ValueMember = "CategoryID";
                 }
 
-                List<DishViewModel> dishes = context.Dishes
+                List<DishDto> dishes = context.Dishes
                     .Include(d => d.DishCategory)
                     .ToList()
-                    .Select(d => new DishViewModel
+                    .Select(d => new DishDto
                     {
                         DishID = d.DishID,
                         DishName = d.DishName,
@@ -908,7 +910,7 @@ namespace KitchenBoss.AppForms
                         CategoryName = d.DishCategory?.CategoryName
                     }).ToList();
 
-                tableViewerDgv.DataSource = new BindingList<DishViewModel>(dishes);
+                tableViewerDgv.DataSource = new BindingList<DishDto>(dishes);
             }
         }
 
@@ -1116,7 +1118,7 @@ namespace KitchenBoss.AppForms
                     {
                         if (row.IsNewRow) continue;
 
-                        OrderViewModel orderViewModel = row.DataBoundItem as OrderViewModel;
+                        OrderDto orderViewModel = row.DataBoundItem as OrderDto;
 
                         int? customerId = row.Cells["CustomerID"].Value as int?;
                         int? employeeId = row.Cells["EmployeeID"].Value as int?;
@@ -1620,7 +1622,7 @@ namespace KitchenBoss.AppForms
 
             if (!e.Row.IsNewRow)
             {
-                EmployeeViewModel employee = e.Row.DataBoundItem as EmployeeViewModel;
+                EmployeeDto employee = e.Row.DataBoundItem as EmployeeDto;
                 if (employee != null)
                 {
                     if (employee.EmployeeID > 0)
@@ -1629,7 +1631,7 @@ namespace KitchenBoss.AppForms
                         _isChanged = true;
                         saveButton.Enabled = true;
                     }
-                    ((BindingList<EmployeeViewModel>)tableViewerDgv.DataSource).Remove(employee);
+                    ((BindingList<EmployeeDto>)tableViewerDgv.DataSource).Remove(employee);
                 }
             }
         }
@@ -1821,7 +1823,7 @@ namespace KitchenBoss.AppForms
                         DataGridViewRow selectedRow = tableViewerDgv.Rows[rowIndex];
                         if (selectedRow.DataBoundItem != null)
                         {
-                            OrderViewModel order = selectedRow.DataBoundItem as OrderViewModel;
+                            OrderDto order = selectedRow.DataBoundItem as OrderDto;
                             if (order != null)
                             {
                                 fmTableViewer orderItemsForm = new fmTableViewer(customerId: order.CustomerID, orderId: order.OrderID, orderItemsMode: true, employeeId: _employeeId);
@@ -1864,8 +1866,8 @@ namespace KitchenBoss.AppForms
                 Size = new Size(497, 431);
                 tableViewerDgv.Size = new Size(457, 280);
                 saveButton.Location = new Point(380, 5);
-                tableViewerDgv.ReadOnly = _positionName != "Менеджер";
-                saveButton.Visible = _positionName == "Менеджер";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager);
             }
 
             else if (_isCustomersMode)
@@ -1876,8 +1878,8 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 SetupCustomersDataGridView();
                 LoadCustomersData();
-                tableViewerDgv.ReadOnly = _positionName == "Повар" || _positionName == "Повар-стажер";
-                saveButton.Visible = _positionName != "Повар" || _positionName != "Повар-стажер";
+                tableViewerDgv.ReadOnly = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Cook) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.CookTrainee);
+                saveButton.Visible = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Cook) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.CookTrainee);
             }
             else if (_isOrdersMode)
             {
@@ -1891,8 +1893,8 @@ namespace KitchenBoss.AppForms
                 saveButton.Location = new Point(556, 5);
                 clientOrderDishesButton.Location = new Point(420, 5);
                 clientOrderDishesButton.Visible = true;
-                tableViewerDgv.ReadOnly = _positionName == "Повар-стажер";
-                saveButton.Visible = _positionName != "Повар-стажер";
+                tableViewerDgv.ReadOnly = _positionName == PositionExtensions.GetPositionDisplayName(Positions.CookTrainee);
+                saveButton.Visible = _positionName != PositionExtensions.GetPositionDisplayName(Positions.CookTrainee);
             }
             else if (_isOrderItemsMode)
             {
@@ -1929,8 +1931,8 @@ namespace KitchenBoss.AppForms
                 SetupUserControlDataGridView(false);
                 LoadUserData(false);
                 tableViewerDgv.CellEndEdit += tableViewerDgv_CellEndEdit_UserControl;
-                tableViewerDgv.ReadOnly = _positionName != "Менеджер";
-                saveButton.Visible = _positionName == "Менеджер";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager);
             }
             else if (_isDishesMode)
             {
@@ -1944,8 +1946,8 @@ namespace KitchenBoss.AppForms
                 dishesCategoriesButton.Location = new Point(10, 5);
                 dishesIngredientsButton.Visible = true;
                 dishesIngredientsButton.Location = new Point(145, 5);
-                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
-                saveButton.Visible = _positionName == "Менеджер" || _positionName != "Шеф-повар";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
             }
             else if (_isDishCategoriesMode)
             {
@@ -1955,8 +1957,8 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 SetupDishCategoriesDataGridView();
                 LoadDishCategoriesData();
-                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
-                saveButton.Visible = _positionName == "Менеджер" || _positionName != "Шеф-повар";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
             }
             else if (_isIngredientsMode)
             {
@@ -1966,8 +1968,8 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 SetupIngredientsDataGridView();
                 LoadIngredientsData();
-                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
-                saveButton.Visible = _positionName == "Менеджер" || _positionName == "Шеф-повар";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
             }
             else if (_isTablesMode)
             {
@@ -1979,8 +1981,8 @@ namespace KitchenBoss.AppForms
                 dishesIngredientsButton.Visible = false;
                 SetupTablesDataGridView();
                 LoadTablesData();
-                tableViewerDgv.ReadOnly = _positionName == "Повар" || _positionName == "Повар-стажер";
-                saveButton.Visible = _positionName != "Повар" || _positionName != "Повар-стажер";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
             }
             else
             {
@@ -1989,8 +1991,8 @@ namespace KitchenBoss.AppForms
                 Size = new Size(682, 431);
                 tableViewerDgv.Size = new Size(642, 280);
                 saveButton.Location = new Point(556, 5);
-                tableViewerDgv.ReadOnly = _positionName != "Менеджер" || _positionName != "Шеф-повар";
-                saveButton.Visible = _positionName == "Менеджер" || _positionName == "Шеф-повар";
+                tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
+                saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
             }
         }
     }

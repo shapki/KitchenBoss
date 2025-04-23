@@ -2,7 +2,7 @@
 
 namespace KitchenBoss.AppData
 {
-    public class EmployeeViewModel
+    public class EmployeeDto
     {
         public int EmployeeID { get; set; }
         public string FullName { get; set; }
