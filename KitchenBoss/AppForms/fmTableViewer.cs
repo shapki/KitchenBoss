@@ -50,7 +50,7 @@ namespace KitchenBoss.AppForms
         /// <param name="dishCategoriesMode">Нужно ли отображать данные о категориях блюд.</param>
         /// <param name="ingredientsMode">Нужно ли отображать данные об ингредиентах.</param>
         /// <param name="tablesMode">Нужно ли отображать данные о столиках.</param>
-        /// <param name="position">Должность текущего пользователя.</param>
+        /// <param name="employeeId">Идентификатор сотрудника текущего пользователя.</param>
         public fmTableViewer(bool positionsMode = false, bool customerMode = false, bool ordersMode = false,
                             int? customerId = null, int? orderId = null, bool orderItemsMode = false,
                             bool userControlMode = false, bool userControlOnlyManager = false,
