@@ -910,6 +910,8 @@ namespace KitchenBoss.AppForms
                         CategoryName = d.DishCategory?.CategoryName
                     }).ToList();
 
+                SortDishes(dishes);
+
                 tableViewerDgv.DataSource = new BindingList<DishDto>(dishes);
             }
         }
@@ -1853,6 +1855,25 @@ namespace KitchenBoss.AppForms
             ingredientsForm.Show();
         }
 
+        private void SortDishes(List<DishDto> dishes)
+        {
+            string selectedSortOption = sortParamComboBox.SelectedItem as string;
+
+            if (selectedSortOption == "Категории")
+            {
+                dishes.Sort((x, y) =>
+                {
+                    if (x.CategoryName == null && y.CategoryName == null) return 0;
+                    if (x.CategoryName == null) return -1;
+                    if (y.CategoryName == null) return 1;
+
+                    return string.Compare(x.CategoryName, y.CategoryName, StringComparison.CurrentCultureIgnoreCase);
+                });
+            }
+            else if (selectedSortOption == "Цены")
+                dishes.Sort((x, y) => y.Price.CompareTo(x.Price));
+        }
+
         private void ConfigureFormForMode()
         {
             if (_isPositionsMode)
@@ -1942,6 +1963,9 @@ namespace KitchenBoss.AppForms
                 clientOrderDishesButton.Visible = false;
                 sortParamLabel.Visible = true;
                 sortParamComboBox.Visible = true;
+                sortParamComboBox.Items.Add("Категории");
+                sortParamComboBox.Items.Add("Цены");
+                sortParamComboBox.SelectedIndex = 0;
                 SetupDishesDataGridView();
                 LoadDishesData();
                 dishesCategoriesButton.Visible = true;
@@ -1995,6 +2019,28 @@ namespace KitchenBoss.AppForms
                 saveButton.Location = new Point(556, 5);
                 tableViewerDgv.ReadOnly = _positionName != PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName != PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
                 saveButton.Visible = _positionName == PositionExtensions.GetPositionDisplayName(Positions.Manager) || _positionName == PositionExtensions.GetPositionDisplayName(Positions.ChefCook);
+            }
+        }
+
+        private void sortParamComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (var context = Program.context)
+            {
+                List<DishDto> dishes = context.Dishes
+                    .Include(d => d.DishCategory)
+                    .ToList()
+                    .Select(d => new DishDto
+                    {
+                        DishID = d.DishID,
+                        DishName = d.DishName,
+                        CategoryID = d.CategoryID,
+                        Price = d.Price,
+                        Description = d.Description,
+                        CategoryName = d.DishCategory?.CategoryName
+                    }).ToList();
+
+                SortDishes(dishes);
+                tableViewerDgv.DataSource = new BindingList<DishDto>(dishes);
             }
         }
     }

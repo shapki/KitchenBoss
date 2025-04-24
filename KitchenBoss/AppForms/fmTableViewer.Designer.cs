@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fmTableViewer));
             this.headerPanel = new System.Windows.Forms.Panel();
+            this.sortParamComboBox = new System.Windows.Forms.ComboBox();
+            this.sortParamLabel = new System.Windows.Forms.Label();
             this.headerTitleLabel = new System.Windows.Forms.Label();
             this.headerSubtitleLabel = new System.Windows.Forms.Label();
             this.headerLogoBackPanel = new System.Windows.Forms.Panel();
@@ -41,8 +43,6 @@
             this.buttonsPanel = new System.Windows.Forms.Panel();
             this.dishesIngredientsButton = new System.Windows.Forms.Button();
             this.dishesCategoriesButton = new System.Windows.Forms.Button();
-            this.sortParamLabel = new System.Windows.Forms.Label();
-            this.sortParamComboBox = new System.Windows.Forms.ComboBox();
             this.headerPanel.SuspendLayout();
             this.headerLogoBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).BeginInit();
@@ -63,6 +63,32 @@
             this.headerPanel.Name = "headerPanel";
             this.headerPanel.Size = new System.Drawing.Size(500, 70);
             this.headerPanel.TabIndex = 13;
+            // 
+            // sortParamComboBox
+            // 
+            this.sortParamComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.sortParamComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.sortParamComboBox.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.sortParamComboBox.ForeColor = System.Drawing.Color.Silver;
+            this.sortParamComboBox.FormattingEnabled = true;
+            this.sortParamComboBox.Location = new System.Drawing.Point(276, 32);
+            this.sortParamComboBox.Name = "sortParamComboBox";
+            this.sortParamComboBox.Size = new System.Drawing.Size(153, 25);
+            this.sortParamComboBox.TabIndex = 6;
+            this.sortParamComboBox.Visible = false;
+            this.sortParamComboBox.SelectedIndexChanged += new System.EventHandler(this.sortParamComboBox_SelectedIndexChanged);
+            // 
+            // sortParamLabel
+            // 
+            this.sortParamLabel.BackColor = System.Drawing.Color.Transparent;
+            this.sortParamLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.sortParamLabel.ForeColor = System.Drawing.Color.Silver;
+            this.sortParamLabel.Location = new System.Drawing.Point(272, 10);
+            this.sortParamLabel.Name = "sortParamLabel";
+            this.sortParamLabel.Size = new System.Drawing.Size(216, 19);
+            this.sortParamLabel.TabIndex = 5;
+            this.sortParamLabel.Text = "Сортировать блюда по";
+            this.sortParamLabel.Visible = false;
             // 
             // headerTitleLabel
             // 
@@ -254,31 +280,6 @@
             this.dishesCategoriesButton.UseVisualStyleBackColor = false;
             this.dishesCategoriesButton.Visible = false;
             this.dishesCategoriesButton.Click += new System.EventHandler(this.dishesCategoriesButton_Click);
-            // 
-            // sortParamLabel
-            // 
-            this.sortParamLabel.BackColor = System.Drawing.Color.Transparent;
-            this.sortParamLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.sortParamLabel.ForeColor = System.Drawing.Color.Silver;
-            this.sortParamLabel.Location = new System.Drawing.Point(272, 10);
-            this.sortParamLabel.Name = "sortParamLabel";
-            this.sortParamLabel.Size = new System.Drawing.Size(216, 19);
-            this.sortParamLabel.TabIndex = 5;
-            this.sortParamLabel.Text = "Сортировать блюда по";
-            this.sortParamLabel.Visible = false;
-            // 
-            // sortParamComboBox
-            // 
-            this.sortParamComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.sortParamComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.sortParamComboBox.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.sortParamComboBox.ForeColor = System.Drawing.Color.Silver;
-            this.sortParamComboBox.FormattingEnabled = true;
-            this.sortParamComboBox.Location = new System.Drawing.Point(276, 32);
-            this.sortParamComboBox.Name = "sortParamComboBox";
-            this.sortParamComboBox.Size = new System.Drawing.Size(153, 25);
-            this.sortParamComboBox.TabIndex = 6;
-            this.sortParamComboBox.Visible = false;
             // 
             // fmTableViewer
             // 
