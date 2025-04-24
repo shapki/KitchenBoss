@@ -1940,6 +1940,8 @@ namespace KitchenBoss.AppForms
                 headerSubtitleLabel.Text = "Блюда";
                 positionsButton.Visible = false;
                 clientOrderDishesButton.Visible = false;
+                sortParamLabel.Visible = true;
+                sortParamComboBox.Visible = true;
                 SetupDishesDataGridView();
                 LoadDishesData();
                 dishesCategoriesButton.Visible = true;
