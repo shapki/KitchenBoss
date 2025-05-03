@@ -1,7 +1,9 @@
-﻿using KitchenBoss.Properties;
+﻿using KitchenBoss.AppModels;
+using KitchenBoss.Properties;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -18,6 +20,27 @@ namespace KitchenBoss.AppForms
         public fmLogin()
         {
             InitializeComponent();
+        }
+
+        private void fmLogin_Load(object sender, EventArgs e)
+        {
+            if (!Program.context.Users.Any())
+            {
+                MessageBox.Show("Для Ивана (Менеджера) был создан пароль admin123! После входа поменяйте его!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                using (var context = Program.context)
+                {
+                    Guid newSalt = Guid.NewGuid();
+                    string hashedPassword1 = HashPassword("admin123" ?? "defaultpassword", newSalt.ToString());
+                    User newUser = new User
+                    {
+                        EmployeeID = 1,
+                        PasswordHash = Convert.FromBase64String(hashedPassword1),
+                        PasswordSalt = newSalt
+                    };
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                }
+            }
         }
 
         private void showPasswordPictureBox_Click(object sender, EventArgs e)
@@ -101,7 +124,7 @@ namespace KitchenBoss.AppForms
         /// <param name="password">Пароль для хэширования.</param>
         /// <param name="salt">Соль для усиления безопасности.</param>
         /// <returns>Хэшированный пароль в формате Base64.</returns>
-        private string HashPassword(string password, string salt)
+        public string HashPassword(string password, string salt)
         {
             string passwordWithSalt = salt + password;
             using (var sha512 = SHA512.Create())

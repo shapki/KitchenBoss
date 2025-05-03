@@ -121,6 +121,14 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="AppDocuments\1_Титл_лист_КП.docx" />
+    <None Include="AppDocuments\2_Отзыв.docx" />
+    <None Include="AppDocuments\3_Кур_зад_титул.docx" />
+    <None Include="AppDocuments\4_Кур_задан_начинка.docx" />
+    <None Include="AppDocuments\5_Тех_зад_титул.docx" />
+    <None Include="AppDocuments\6_Тех_зад_начинка.docx" />
+    <None Include="AppDocuments\7_ПЗ_Титул.docx" />
+    <None Include="AppDocuments\8_ПЗ_Начинка.docx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

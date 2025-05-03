@@ -282,6 +282,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KitchenBoss - Авторизация";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmLogin_FormClosing);
+            this.Load += new System.EventHandler(this.fmLogin_Load);
             this.headerPanel.ResumeLayout(false);
             this.headerLogoBackPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.headerLogoPictureBox)).EndInit();
