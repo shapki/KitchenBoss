@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -1319,16 +1320,7 @@ namespace KitchenBoss.AppForms
                         }
                         else
                         {
-                            Guid newSalt = Guid.NewGuid();
-                            string hashedPassword = HashPassword(password ?? "defaultpassword", newSalt.ToString());
-
-                            User newUser = new User
-                            {
-                                EmployeeID = employeeId,
-                                PasswordHash = Convert.FromBase64String(hashedPassword),
-                                PasswordSalt = newSalt
-                            };
-                            context.Users.Add(newUser);
+                            CreateUser(password, employeeId);
                         }
                     }
 
@@ -1510,7 +1502,6 @@ namespace KitchenBoss.AppForms
             }
         }
 
-
         /// <summary>
         /// PKGH Хэширует пароль с использованием SHA512 и соли.
         /// </summary>
@@ -1527,6 +1518,24 @@ namespace KitchenBoss.AppForms
 
                 return Convert.ToBase64String(hashBytes);
             }
+        }
+
+        /// <summary>
+        /// PKGH Создаёт пользователя с заданным паролем.
+        /// </summary>
+        /// <param name="password">Пароль для хеширования.</param>
+        /// <param name="emplId">Идентификатор сотрудника.</param>
+        public void CreateUser(string password, int emplId)
+        {
+            Guid newSalt = Guid.NewGuid();
+            string hashedPassword = HashPassword(password, newSalt.ToString());
+            User newUser = new User
+            {
+                EmployeeID = emplId,
+                PasswordHash = Convert.FromBase64String(hashedPassword),
+                PasswordSalt = newSalt
+            };
+            Program.context.Users.Add(newUser);
         }
 
         /// <summary>
